@@ -9,7 +9,7 @@ def load_backup(FIELDS, BACKUPS, WIDTH):
     print("loading backup")
     return FIELDS, BACKUPS
 
-def delete_field(selected_field, FIELDS):
+'''def delete_field(selected_field, FIELDS):
     selec_x = selected_field.rect.x
     selec_w = selected_field.rect.width
     removed = 0
@@ -53,12 +53,8 @@ def delete_field(selected_field, FIELDS):
             if field.rect.y > selected_hoogte and selec_x + selec_w > field.rect.x:
                 print(f"{field.name}:{field.type}:{field.rect}")
                 field.rect.y -= (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT) * removed
-                '''for item in FIELDS:
-                    if item != field and item.rect.colliderect(field.rect):
-                        field.rect.y += theme.FIELD_HEIGHT + theme.MARGIN_HEIGHT
-                        break'''
     selected_field = None
-    return selected_field, FIELDS
+    return selected_field, FIELDS'''
 
 '''def delete_field(selected_field, FIELDS):
     hoogte = 0
@@ -83,3 +79,13 @@ def delete_field(selected_field, FIELDS):
             field.rect.y -= removed * theme.FIELD_HEIGHT
             print(field.type, field.name, field.rect)
     return selected_field, FIELDS'''
+
+def delete_field(selected_field, FIELDS):
+
+    hoogte = selected_field.rect.y
+    alt = selected_field.rect.y
+    for item in field:
+        if item.rect.x > selected_field.rect.x and item.rect.x + item.rect.width <= selected_field.rect.x:
+            if item.rect.y > hoogte:
+                hoogte = item.rect.y
+        elif hoogte < 
