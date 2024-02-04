@@ -1,8 +1,10 @@
+from saveload import load_json
 from Settings import Window
 
-def load_backup(FIELDS, BACKUPS):
+def load_backup(FIELDS, BACKUPS, WIDTH):
     if len(BACKUPS) > 0:
-        FIELDS = BACKUPS.pop(len(BACKUPS) - 1)
+        temp = BACKUPS.pop(len(BACKUPS) - 1)
+        FIELDS, WIDTH = load_json(temp, WIDTH, False)
     print("other fields:", FIELDS)
     print("loading backup")
     return FIELDS, BACKUPS

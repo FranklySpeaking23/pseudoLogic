@@ -4,7 +4,6 @@ import pygame
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import draw
 from json import dump, load
-from design import field
 from os import getlogin
 
 def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
@@ -41,23 +40,32 @@ def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
     if name != "":
         pygame.image.save(surface, f"{name}.png")
 
-def save_json(FIELDS, WIDTH):
+def save_json(FIELDS, WIDTH, popup=True):
     save_fields = [WIDTH]
     for field in FIELDS:
         lijst = [field.name, field.rect.topleft, field.dimensions, field.type, field.old_x, field.old_w, field.border]
         save_fields.append(lijst)
-    name = asksaveasfilename(initialfile=SaveAndLoad.SAVE_NAME_FILE, initialdir=SaveAndLoad.SAVE_DIR_FILE)
-    if name != "":
-        with open(f"{name}.json", "w") as file:
-            dump(save_fields, file)
+    if popup:
+        name = asksaveasfilename(initialfile=SaveAndLoad.SAVE_NAME_FILE, initialdir=SaveAndLoad.SAVE_DIR_FILE)
+        if name != "":
+            with open(f"{name}.json", "w") as file:
+                dump(save_fields, file)
+    return save_fields
 
-def load_json(FIELDS, WIDTH):
-    file_selected = askopenfilename(filetypes=[("json", ".json")], initialfile=SaveAndLoad.LOAD_NAME_FILE, initialdir=SaveAndLoad.LOAD_DIR_FILE)
-    print(file_selected)
+def load_json(FIELDS, WIDTH, popup=True):
+    from design import field
+    if popup:
+        file_selected = askopenfilename(filetypes=[("json", ".json")], initialfile=SaveAndLoad.LOAD_NAME_FILE, initialdir=SaveAndLoad.LOAD_DIR_FILE)
+        print(file_selected)
+    else:
+        file_selected = FIELDS
     try:
-        print("file", file_selected)
-        with open(file_selected, "r") as file:
-            save_fields = load(file)
+        if popup:
+            print("file", file_selected)
+            with open(file_selected, "r") as file:
+                save_fields = load(file)
+        else:
+            save_fields = FIELDS
         print("loaded", save_fields)
         FIELDS = []
         width_s = save_fields.pop(0)

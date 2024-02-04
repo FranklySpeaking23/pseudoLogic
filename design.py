@@ -1,3 +1,4 @@
+from saveload import save_json
 import pygame
 from Settings import Colors, Text, Window
 pygame.font.init()
@@ -117,6 +118,7 @@ class buttons:
             if self.argument in ["default", "while", "if", "function"]:
                 temp = []
                 temp.extend(FIELDS)
+                temp = save_json(temp, WIDTH, False)
                 BACKUPS.append(temp)
                 FIELDS, selected_field = self.action(self.argument, FIELDS, selected_field, FIELD_WIDTH)
             elif self.argument != None:
@@ -135,7 +137,7 @@ class buttons:
                     BACKUPS.append(temp)
                     selected_field, FIELDS = self.action(selected_field, FIELDS)
                 elif "load_backup" in str(self.action):
-                    FIELDS, BACKUPS = self.action(FIELDS, BACKUPS)
+                    FIELDS, BACKUPS = self.action(FIELDS, BACKUPS, WIDTH)
                 else:
                     self.action()
         print(FIELDS, BACKUPS)
