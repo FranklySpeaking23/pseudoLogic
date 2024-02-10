@@ -137,12 +137,28 @@ def delete_field(selected_field, FIELDS):
         for i, field in enumerate(fields):
             if field.rect.y > 20: 
                 new_height = field.rect.y - Window.MARGIN_HEIGHT - Window.FIELD_HEIGHT
+                con = False
                 for j in range(i):
                     item = fields[j]
                     if item.rect.collidepoint((field.rect.x, new_height)) or item.rect.collidepoint((field.rect.x, new_height + 10)):
-                        break
+                        if not ((field.type == "if-dan" or field.type == "if-anders") and item.type == "if"):
+                            break
                 else:
-                    field.rect.y = new_height
+                    con = True
+                    #field.rect.y = new_height
+                if con:
+                    checking = []
+                    for j in range(i):
+                        item = fields[j]
+                        if item.rect.y + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT >= field.rect.y:
+                            checking.append(item)
+                    for item in checking:
+                        if field.rect.x < item.rect.x < field.rect.x + field.rect.width:
+                            if not ((field.type == "if-dan" or field.type == "if-anders") and item.type == "if"):
+                                break
+                    else:
+                        field.rect.y = new_height
+
     FIELDS = fields
     selected_field = None
     return selected_field, FIELDS
