@@ -5,8 +5,6 @@ def load_backup(FIELDS, BACKUPS, WIDTH):
     if len(BACKUPS) > 0:
         temp = BACKUPS.pop(len(BACKUPS) - 1)
         FIELDS, WIDTH = load_json(temp, WIDTH, False)
-    print("other fields:", FIELDS)
-    print("loading backup")
     return FIELDS, BACKUPS
 
 '''def delete_field(selected_field, FIELDS):
@@ -80,12 +78,71 @@ def load_backup(FIELDS, BACKUPS, WIDTH):
             print(field.type, field.name, field.rect)
     return selected_field, FIELDS'''
 
-def delete_field(selected_field, FIELDS):
+'''def delete_field(selected_field, FIELDS):
 
     hoogte = selected_field.rect.y
     alt = selected_field.rect.y
     for item in field:
-        if item.rect.x > selected_field.rect.x and item.rect.x + item.rect.width <= selected_field.rect.x:
+        if item.rect.x > selected_field.rect.x and item.rect.x + item.rect.width <= selected_field.rect.x + selected_field.rect.width:
             if item.rect.y > hoogte:
                 hoogte = item.rect.y
-        elif hoogte < 
+        elif hoogte < '''
+
+def delete_field(selected_field, FIELDS):
+    fields = []
+    fields.extend(FIELDS)
+    fields.sort(key=lambda x:x.rect.y)
+    
+    print("_" * 50)
+    for field in fields:
+        print(f"field: {field.type} : {field.rect}")
+    print("_" * 50)
+
+    height = selected_field.rect.y
+    max_height = None
+    for field in fields:
+        if field.rect.y > height:
+            height = field.rect.y
+
+        if field.rect.x <= selected_field.rect.x and field.rect.x + field.rect.width > selected_field.rect.x:
+            if field.rect.y > selected_field.rect.y: 
+                if max_height == None or field.rect.y < max_height:
+                    max_height = field.rect.y
+
+    if max_height == None:
+        max_height = height + 10
+
+    print(f"max_height: {max_height}")
+    print(f"height: {height}")
+
+    removed = 0
+
+    print(f"selected: {selected_field.rect}")
+    removed_items = []
+    for field in fields:
+        print(f"itr: {field.rect}")
+        if selected_field.rect.x < field.rect.x < selected_field.rect.x + selected_field.rect.width and field.rect.x + field.rect.width <= selected_field.rect.x + selected_field.rect.width + 10:
+            print(f"pass width: {field.name} : {field.type} : {field.rect}")
+            if selected_field.rect.y < field.rect.y < max_height:
+                print(f"pass height: {field.name} : {field.type} : {field.rect}")
+                removed += 1
+                removed_items.append(field)
+    for item in removed_items:
+        fields.remove(item)
+
+    removed += 1
+    fields.remove(selected_field)
+
+    for k in range(removed):
+        for i, field in enumerate(fields):
+            if field.rect.y > 20: 
+                new_height = field.rect.y - Window.MARGIN_HEIGHT - Window.FIELD_HEIGHT
+                for j in range(i):
+                    item = fields[j]
+                    if item.rect.collidepoint((field.rect.x, new_height)) or item.rect.collidepoint((field.rect.x, new_height + 10)):
+                        break
+                else:
+                    field.rect.y = new_height
+    FIELDS = fields
+    selected_field = None
+    return selected_field, FIELDS
