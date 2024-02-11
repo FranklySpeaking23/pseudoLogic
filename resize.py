@@ -1,3 +1,4 @@
+#importing files
 import pygame
 from design import buttons
 from Settings import Text, Window
@@ -5,21 +6,42 @@ import make
 import saveload
 import edit
 
+#function to check if the size of the window changed and take the needed actions
 def window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS):
+
+    #get the current dimensions
     nwidth = WIN.get_width()
     nheight = WIN.get_height()
+
+    #if the width changed
     if nwidth != WIDTH:
+
+        #change the width of the fields
         change_field_width(nwidth - 70, FIELDS, WIDTH)
+
         WIDTH = nwidth
         FIELD_WIDTH = WIDTH - 70
+
+        #update the possitions of the buttons
         BUTTON = update_button_possitions(BUTTON, WIDTH, HEIGHT)
+
+    #if the height changed
     if nheight != HEIGHT:
+
         HEIGHT = nheight
+
+        #change the positions of the buttons
         BUTTON = update_button_possitions(BUTTON, WIDTH, HEIGHT)
+
     return WIDTH, HEIGHT, FIELD_WIDTH, BUTTON
 
+#function to update the possitions of the buttons
 def update_button_possitions(BUTTON, WIDTH, HEIGHT):
+
+    #remove all buttons
     BUTTON = []
+
+    #make all the buttons
     BUTTON.append(buttons(Text.FIELD_DEFAULT, (WIDTH - 50, 10), (40, 40), make.new_field, "default"))
     BUTTON.append(buttons(Text.FIELD_IF_STATEMENT, (WIDTH - 50, 60), (40, 40), make.new_field, "if"))
     BUTTON.append(buttons(Text.FIELD_WHILE_STATEMENT, (WIDTH - 50, 110), (40, 40), make.new_field, "while"))
@@ -29,9 +51,13 @@ def update_button_possitions(BUTTON, WIDTH, HEIGHT):
     BUTTON.append(buttons(Text.LOAD_JSON, (WIDTH - 50, HEIGHT - 150), (40, 40), saveload.load_json, None))
     BUTTON.append(buttons(Text.FIELD_DELETE, (60, HEIGHT - 50), (40, 40), edit.delete_field, None))
     BUTTON.append(buttons(Text.BACK, (10, HEIGHT - 50), (40, 40), edit.load_backup, None))
+
     return BUTTON
 
+#function for changing the width of fields
 def change_field_width(new_field_width, FIELDS, WIDTH):
+
+    #making a library with all the fields sorted per y position
     lines = {}
     for field in FIELDS:
         if not field.rect.y in lines:
@@ -39,26 +65,39 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
         else:
             lines[field.rect.y].append([field.rect.x, field])
 
+    #declaring variables
     old_x = {}
     adjusted = []
 
+    #iterating through the different lines
     for i, line in enumerate(lines.values()):
+
+        #sorting the line based on the fields their x pos
         lijst = sorted(line, key=lambda l:l[0])
         offset = 0
+
+        #iterating through the fields
         for field in lijst:
-            print()
+
             print(old_x)
-            print()
             print(field[1].rect)
+
+            #changing the width of the field
             old_width = field[1].rect.width
             field[1].rect.width = field[1].rect.width * ((new_field_width / (WIDTH - 70)))
+
+            #changing the x pos
             old_x_pos = field[1].rect.x
             try:
+
+                #trying to load the x pos from already changed fields with the same x pos
                 off = old_x[field[1].old_x]
                 field[1].rect.x = off
                 print(field[1].type)
                 print(field[1].name)
                 print(field[1].rect)
+
+            #if the x possition hasn't been used already
             except:
                 old = field[1].rect.x
                 field[1].rect.x = field[1].rect.x + offset

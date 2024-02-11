@@ -1,6 +1,8 @@
+#importing files
 from saveload import load_json
 from Settings import Window
 
+#function to restore program using a backup
 def load_backup(FIELDS, BACKUPS, WIDTH):
     if len(BACKUPS) > 0:
         temp = BACKUPS.pop(len(BACKUPS) - 1)
