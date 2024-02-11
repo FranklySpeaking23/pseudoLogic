@@ -1,42 +1,69 @@
+#importing needed files
 from design import field
 from Settings import Window, Text
 import pygame
 
+#function for making a new field
 def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
+
+    #making some variables
     amount_added = 0
     height_added = 0
     old_x = 0
     old_w = 0
     shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
+
     try:
+
+        #if the current field is an if- or while-statement and the field needs to be below the current field
         if (selected_field.type == "while" or selected_field.type == "if") and not shift:
+
+            #getting the height of statement
             hoogte = selected_field.rect.y
             breedte = selected_field.rect.x
             for item in FIELDS:
                 if item.rect.y > hoogte and item.rect.x > breedte:
                     hoogte = item.rect.y
             hoogte += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+
+            #setting a start possition and type for new fields
             start_pos = (breedte, hoogte)
             pass_type = type
+
         else:
+
+            #setting a start possition and type for new fields
             start_pos = (selected_field.rect.topleft[0], selected_field.rect.topleft[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
         
             if type == "default":
                 pass_type = selected_field.type
             else:
                 pass_type = type
+
+        #setting a dimension for new fields
         dimensions = (selected_field.rect.width, selected_field.rect.height)
+
+
         old_x = selected_field.old_x
         old_w = selected_field.old_w
+
+        #changing the start position if the field needs to be above the selected field
         if shift:
             start_pos = (start_pos[0], start_pos[1] - Window.FIELD_HEIGHT - Window.MARGIN_HEIGHT)
+
+    #if an error appears (e.g. there is no selected field)
     except:
+
+        #setting the new field height
         hoogte = 10
         for veld in FIELDS:
             if veld.rect.y + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT > hoogte:
                 hoogte = veld.rect.y + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+
+        #setting a start possition and dimensions for the new fields
         start_pos = (10, hoogte)
         dimensions = (FIELD_WIDTH, Window.FIELD_HEIGHT)
+
         old_x = 10
         old_w = FIELD_WIDTH
         pass_type = type
@@ -44,10 +71,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
     if shift:
         pass_type = type
 
-    if selected_field != None:
-        print(f"selected: {selected_field.type} : {selected_field.rect}")
-    print(f"start_pos: {start_pos}")
-
+    #making the new field(s) based on the type of the field(s)
     if type == "default":
         FIELDS.append(field(Text.DEFAULT_TEXT, start_pos, (dimensions[0], Window.FIELD_HEIGHT), pass_type, old_x, old_w))
         amount_added = 1
@@ -72,19 +96,24 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         FIELDS.append(field(theme.FUNCTION_LOWER_TEXT, (start_pos[0] + 15, start_pos[0] + theme.FIELD_HEIGHT + theme.MARGIN_HEIGHT), (dimensions[0] - 30, dimensions[1]), "function-sec"))'''
 
 
+    #moving the other fields
     if selected_field != None:
+
+        #iterate through all other fields than the newly added onces
         for i in range(len(FIELDS) - amount_added):
             item = FIELDS[i]
+
+            #if the y position is greater than the y possition of the new fields
             if item.rect.y >= start_pos[1]:
                 print(item.name, ":", item.type, ":", item.rect)
-                touch = False
+
+                #checking the width and changing the height
                 if (start_pos[0] + dimensions[0] >= item.rect.x >= start_pos[0] or item.rect.x < start_pos[0] < item.rect.x + item.rect.width) and (item != selected_field or shift):
-                    touch = True
-                if touch:
                     item.rect.y += (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT) * height_added
                     print(item.name, ":", item.type, ":", item.rect)
                 print("_____________________")
-
+                
+        #setting the selected field to the one that is last added
         selected_field = FIELDS[len(FIELDS) - 1]
 
     return FIELDS, selected_field
