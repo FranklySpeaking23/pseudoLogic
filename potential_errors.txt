@@ -3,6 +3,3 @@ make.py
         - line 21
             - what is field is in another if statement
         - moving the fields
-
-resize
-    - moving all fields to the right of the screen after removing a field in a larger window wich was added in a smaller window

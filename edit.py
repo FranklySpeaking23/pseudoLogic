@@ -131,9 +131,11 @@ def delete_field(selected_field, FIELDS):
                 removed_items.append(field)
     for item in removed_items:
         fields.remove(item)
+        FIELDS.remove(item)
 
     removed += 1
     fields.remove(selected_field)
+    FIELDS.remove(selected_field)
 
     for k in range(removed):
         for i, field in enumerate(fields):
@@ -161,6 +163,6 @@ def delete_field(selected_field, FIELDS):
                     else:
                         field.rect.y = new_height
 
-    FIELDS = fields
+    #FIELDS = fields
     selected_field = None
     return selected_field, FIELDS

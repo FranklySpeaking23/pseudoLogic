@@ -79,8 +79,6 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
         #iterating through the fields
         for field in lijst:
 
-            print(old_x)
-            print(field[1].rect)
 
             #changing the width of the field
             old_width = field[1].rect.width
@@ -93,9 +91,6 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                 #trying to load the x pos from already changed fields with the same x pos
                 off = old_x[field[1].old_x]
                 field[1].rect.x = off
-                print(field[1].type)
-                print(field[1].name)
-                print(field[1].rect)
 
             #if the x possition hasn't been used already
             except:
@@ -109,7 +104,9 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
 
                     #I know that there are to much if statements here, but I'm to lazy to remove them
                     if field[1].type in ["if-dan", "if-sec-T"]:
+                        print(f"{field[1].type} : {field[1].rect}")
                         field[1].rect.x = main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT
+                        print(field[1].rect)
                     if field[1].type in ["if-dan", "if-anders"]:
                         field[1].rect.width = main.rect.width / 2 - 15
                     if field[1].type in ["if-anders"]:
@@ -129,12 +126,10 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
             
             #adjusting the width to match the one from the parent
             if field[1].type == "if-anders":
-                print(FIELDS[FIELDS.index(field[1]) - 2].type)
                 field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 2].rect.x + FIELDS[FIELDS.index(field[1]) - 2].rect.width - field[1].rect.x
             elif field[1].type == "if-sec-F":
                 field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 4].rect.x + FIELDS[FIELDS.index(field[1]) - 4].rect.width - field[1].rect.x
             elif field[1].type == "while-sec":
-                print(FIELDS[FIELDS.index(field[1]) -1].type)
                 field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 1].rect.x + FIELDS[FIELDS.index(field[1]) - 1].rect.width - field[1].rect.x
             else:
                 #making sure that all the fields underneath each other have the same width
@@ -142,11 +137,6 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                     if place.old_x == field[1].old_x and place.old_w == field[1].old_w:
                         field[1].rect.width = place.rect.width
 
-                '''print(field[1].type)
-                print(field[1].rect)
-                print(field[1].name)
-                print(field[1].old_x)'''
-            
             #adding the field to the adjusted fields list
             adjusted.append(field[1])
             offset += field[1].rect.width + field[1].rect.x - old_width - old_x_pos
