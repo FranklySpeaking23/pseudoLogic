@@ -18,11 +18,28 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         #if the current field is an if- or while-statement and the field needs to be below the current field
         if (selected_field.type == "while" or selected_field.type == "if") and not shift:
 
+            print("-" * 50)
             #getting the height of statement
             hoogte = selected_field.rect.y
             breedte = selected_field.rect.x
+            total_height = selected_field.rect.y
+            max_height = None
+
             for item in FIELDS:
-                if item.rect.y > hoogte and item.rect.x > breedte:
+                if item.rect.y > total_height:
+                    total_height = item.rect.y
+
+                if item.rect.x <= selected_field.rect.x and item.rect.x + item.rect.width > selected_field.rect.x:
+                    if item.rect.y > selected_field.rect.y:
+                        print("1")
+                        if max_height == None or max_height > item.rect.y:
+                            print("2")
+                            max_height = item.rect.y
+            if max_height == None:
+                max_height = total_height + 10
+
+            for item in FIELDS:
+                if max_height > item.rect.y > hoogte and breedte + selected_field.rect.width > item.rect.x > breedte:
                     hoogte = item.rect.y
             hoogte += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
 
@@ -52,7 +69,9 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
             start_pos = (start_pos[0], start_pos[1] - Window.FIELD_HEIGHT - Window.MARGIN_HEIGHT)
 
     #if an error appears (e.g. there is no selected field)
-    except:
+    except AttributeError:
+        print("_" * 50)
+        print("An error!!!")
 
         #setting the new field height
         hoogte = 10
@@ -106,18 +125,19 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
     print(fields)
     if fields != None:
         print("fjeosj")
-        for item in fields:
-            for r in FIELDS:
-                print(f"{item.type} : {item.rect} --- {r.type} : {r.rect}")
-                if item.rect.colliderect(r.rect) and r != item and (not item.type in ["if-dan", "if-anders"]):
-                    if (item.type == "if" and (not r.type in ["if-dan", "if-anders"])) or item.type != "if":
-                        if item.type == "if":
-                            FIELDS[FIELDS.index(item) + 1].rect.y += height_added * (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
-                            FIELDS[FIELDS.index(item) + 2].rect.y += height_added * (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+        for i in range(height_added):
+            for item in fields:
+                for r in FIELDS:
+                    print(f"{item.type} : {item.rect} --- {r.type} : {r.rect}")
+                    if item.rect.colliderect(r.rect) and r != item and (not item.type in ["if-dan", "if-anders"]):
+                        if (item.type == "if" and (not r.type in ["if-dan", "if-anders"])) or item.type != "if":
+                            if item.type == "if":
+                                FIELDS[FIELDS.index(item) + 1].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                                FIELDS[FIELDS.index(item) + 2].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
 
-                        print(item.rect, ":", r.rect)
-                        item.rect.y += height_added * (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
-                        break
+                            print(item.rect, ":", r.rect)
+                            item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                            break
 
 
     '''if selected_field != None:

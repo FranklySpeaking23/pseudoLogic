@@ -125,6 +125,10 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
             #adjusting the width to match the one from the parent
             if field[1].type == "if-anders":
                 field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 2].rect.x + FIELDS[FIELDS.index(field[1]) - 2].rect.width - field[1].rect.x
+            elif field[1].type == "if-sec-F" and FIELDS[FIELDS.index(field[1]) - 4].type == "if":
+                field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 4].rect.x + FIELDS[FIELDS.index(field[1]) - 4].rect.width - field[1].rect.x
+            elif field[1].type == "while-sec" and FIELDS[FIELDS.index(field[1]) - 1].type == "while":
+                field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 1].rect.x + FIELDS[FIELDS.index(field[1]) - 1].rect.width - field[1].rect.x
             #elif field[1].type == "if-sec-F":
             #    field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 4].rect.x + FIELDS[FIELDS.index(field[1]) - 4].rect.width - field[1].rect.x
             #elif field[1].type == "while-sec":
