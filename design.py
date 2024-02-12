@@ -105,6 +105,8 @@ class buttons:
 
         #changing the amount of characters that get shown based on the width that is available
         while text.get_width() > self.rect.width - 20:
+            if abs(index) >= len(self.name):
+                break
             txt = self.name[0:index]
             text = self.font.render(txt, 1, Colors.TEXT)
             index -= 1
