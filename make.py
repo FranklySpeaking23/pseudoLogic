@@ -88,7 +88,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         FIELDS.append(field(Text.WHILE_STATEMENT_TEXT, start_pos, (dimensions[0], Window.FIELD_HEIGHT), type, old_x, old_w)),
         FIELDS.append(field(Text.WHILE_STATEMENT_LOWER_TEXT, (start_pos[0] + Window.MARGIN_WHILE_STATEMENT, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] - Window.MARGIN_WHILE_STATEMENT, Window.FIELD_HEIGHT), "while-sec", old_x + Window.MARGIN_WHILE_STATEMENT, old_w - Window.MARGIN_WHILE_STATEMENT))
         
-        amount_added = 3
+        amount_added = 2
         height_added = 2
 
     '''elif type == "function":
@@ -97,7 +97,30 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
 
     #moving the other fields
-    if selected_field != None:
+    
+    print("_" * 50)
+    fields = []
+    fields.extend(FIELDS)
+    fields = fields[0:len(FIELDS) - amount_added]
+    fields.sort(key=lambda x:x.rect.y)
+    print(fields)
+    if fields != None:
+        print("fjeosj")
+        for item in fields:
+            for r in FIELDS:
+                print(f"{item.type} : {item.rect} --- {r.type} : {r.rect}")
+                if item.rect.colliderect(r.rect) and r != item and (not item.type in ["if-dan", "if-anders"]):
+                    if (item.type == "if" and (not r.type in ["if-dan", "if-anders"])) or item.type != "if":
+                        if item.type == "if":
+                            FIELDS[FIELDS.index(item) + 1].rect.y += height_added * (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+                            FIELDS[FIELDS.index(item) + 2].rect.y += height_added * (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+
+                        print(item.rect, ":", r.rect)
+                        item.rect.y += height_added * (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+                        break
+
+
+    '''if selected_field != None:
 
         #iterate through all other fields than the newly added onces
         for i in range(len(FIELDS) - amount_added):
@@ -114,6 +137,6 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
                 print("_____________________")
                 
         #setting the selected field to the one that is last added
-        selected_field = FIELDS[len(FIELDS) - 1]
+        selected_field = FIELDS[len(FIELDS) - 1]'''
 
     return FIELDS, selected_field

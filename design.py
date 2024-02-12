@@ -132,7 +132,6 @@ class buttons:
                     txt = txt[:-1]
                     text = self.font.render(txt, 1, Colors.TEXT)
                 self.type_location = len(txt)
-                print(len(txt), self.type_location)
 
         #drawing the cursor
         if self == selected_field and time % 60 < 30:
@@ -173,7 +172,6 @@ class buttons:
 
             #special cases
             else:
-                print(self.action)
                 if "load_json" in str(self.action):
                     FIELDS, WIDTH = self.action(FIELDS, WIDTH)
                 elif "save_json" in str(self.action):
@@ -192,7 +190,6 @@ class buttons:
                 else:
                     self.action()
 
-        print(FIELDS, BACKUPS)
         return FIELDS, selected_field, BACKUPS
 
 #main class for the fields

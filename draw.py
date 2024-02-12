@@ -32,10 +32,10 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
                 comp_rect = pygame.Rect(item.rect.x, item.rect.y - offset, item.rect.width, item.rect.height)
 
                 #checking collision
-                if rect.collidepoint(comp_rect.topleft):
+                if rect.colliderect(comp_rect):
 
                     #check collision with fields
-                    if item.type != "while" and pygame.Rect(rect.x, rect.y, rect.width, Window.FIELD_HEIGHT).collidepoint(comp_rect.topleft):
+                    if item.type != "while" and pygame.Rect(rect.x, rect.y, rect.width, Window.FIELD_HEIGHT).colliderect(comp_rect):
                         collision = True
                     
                     if item.type == "while":
@@ -44,27 +44,27 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
             #if no collision with fields other than while-statements
             if not collision:
 
-                #if rect touches while-statement
-                if source != None:
+                #iterate through previous rects
+                for block in blocks:
 
-                    #align rect with field and draw to screen
-                    rect = pygame.Rect(source.rect.x, rect.y, rect.width, rect.height)
-                    pygame.draw.rect(surface, Colors.WHILE_STATEMENT, rect, Window.BORDER, Window.ROUNDING)
-                    blocks.append(rect)
+                    #if collision with a previous field (prevent drawing on empty space)
+                    if block.colliderect(rect):
 
-                #if not touching any field
+                        #align rect and draw to screen
+                        rect = pygame.Rect(block.x, rect.y, rect.width, rect.height)
+                        pygame.draw.rect(surface, Colors.WHILE_STATEMENT, rect, Window.BORDER, Window.ROUNDING)
+                        blocks.append(rect)
+                        break
+
+                
                 else:
-                    #iterate through previous rects
-                    for block in blocks:
+                    if source != None:
+                        #if rect touches while-statement
 
-                        #if collision with a previous field (prevent drawing on empty space)
-                        if block.colliderect(rect):
-
-                            #align rect and draw to screen
-                            rect = pygame.Rect(block.x, rect.y, rect.width, rect.height)
-                            pygame.draw.rect(surface, Colors.WHILE_STATEMENT, rect, Window.BORDER, Window.ROUNDING)
-                            blocks.append(rect)
-                            break
+                        #align rect with field and draw to screen
+                        rect = pygame.Rect(source.rect.x, source.rect.y - offset, rect.width, rect.height)
+                        pygame.draw.rect(surface, Colors.WHILE_STATEMENT, rect, Window.BORDER, Window.ROUNDING)
+                        blocks.append(rect)
 
 #function for drawing lines as the background of the application
 def lines(surface, sort, WIDTH, HEIGHT):

@@ -104,9 +104,7 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
 
                     #I know that there are to much if statements here, but I'm to lazy to remove them
                     if field[1].type in ["if-dan", "if-sec-T"]:
-                        print(f"{field[1].type} : {field[1].rect}")
                         field[1].rect.x = main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT
-                        print(field[1].rect)
                     if field[1].type in ["if-dan", "if-anders"]:
                         field[1].rect.width = main.rect.width / 2 - 15
                     if field[1].type in ["if-anders"]:
@@ -127,10 +125,10 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
             #adjusting the width to match the one from the parent
             if field[1].type == "if-anders":
                 field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 2].rect.x + FIELDS[FIELDS.index(field[1]) - 2].rect.width - field[1].rect.x
-            elif field[1].type == "if-sec-F":
-                field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 4].rect.x + FIELDS[FIELDS.index(field[1]) - 4].rect.width - field[1].rect.x
-            elif field[1].type == "while-sec":
-                field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 1].rect.x + FIELDS[FIELDS.index(field[1]) - 1].rect.width - field[1].rect.x
+            #elif field[1].type == "if-sec-F":
+            #    field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 4].rect.x + FIELDS[FIELDS.index(field[1]) - 4].rect.width - field[1].rect.x
+            #elif field[1].type == "while-sec":
+            #    field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 1].rect.x + FIELDS[FIELDS.index(field[1]) - 1].rect.width - field[1].rect.x
             else:
                 #making sure that all the fields underneath each other have the same width
                 for place in adjusted:
