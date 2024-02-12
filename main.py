@@ -1,7 +1,7 @@
 #importing needed files / libraries
 import pygame
 from Settings import Window
-#import update_checker
+import update_checker
 import draw
 from resize import window_size, update_button_possitions
 import edit

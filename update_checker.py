@@ -10,7 +10,7 @@ try:
     doc = BeautifulSoup(result.text, "html.parser")
 
     #extracting the version from the webpage
-    version = doc.text
+    version = doc.text.strip("\n")
 
     #reading the currently installed version
     with open("version.txt", "r") as file:
