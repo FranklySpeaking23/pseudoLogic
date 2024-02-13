@@ -3,11 +3,11 @@ from design import field
 from Settings import Window, Text
 import pygame
 from edit import move_down
-from colorama import Fore, Style
+from dev import log
 
 #function for making a new field
 def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
-    print(f"{Fore.RED}[Making field(s)]{Style.RESET_ALL}")
+    log("Making fields", "func-s")
     #making some variables
     amount_added = 0
     height_added = 0
@@ -156,5 +156,5 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         #setting the selected field to the one that is last added
         selected_field = FIELDS[len(FIELDS) - 1]'''
 
-    print(f"{Fore.GREEN}[Making field(s)]{Style.RESET_ALL}")
+    log("Making fields", "func-e")
     return FIELDS, selected_field

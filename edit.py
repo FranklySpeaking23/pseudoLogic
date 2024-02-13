@@ -3,15 +3,15 @@ from dev import log
 import pygame
 from saveload import load_json, save_json
 from Settings import Window
-from colorama import Style, Fore
+from dev import log
 
 #function to restore program using a backup
 def load_backup(FIELDS, BACKUPS, WIDTH):
-    print(f"{Fore.RED}[Loading backup]{Style.RESET_ALL}")
+    log("Loading backup", "func-s")
     if len(BACKUPS) > 0:
         temp = BACKUPS.pop(len(BACKUPS) - 1)
         FIELDS, WIDTH = load_json(temp, WIDTH, False)
-    print(f"{Fore.GREEN}[Loading backup]{Style.RESET_ALL}")
+    log("Loading backup", "func-e")
     return FIELDS, BACKUPS
 
 '''def delete_field(selected_field, FIELDS):
@@ -96,7 +96,7 @@ def load_backup(FIELDS, BACKUPS, WIDTH):
         elif hoogte < '''
 
 def delete_field(selected_field, FIELDS):
-    print(f"{Fore.RED}[Deleting fields]{Style.RESET_ALL}")
+    log("Deleting fields", "func-s")
     fields = []
     fields.extend(FIELDS)
     fields.sort(key=lambda x:x.rect.y)
@@ -135,11 +135,11 @@ def delete_field(selected_field, FIELDS):
 
     #FIELDS = fields
     selected_field = None
-    print(f"{Fore.GREEN}[Deleting fields]{Style.RESET_ALL}")
+    log("Deleting fields", "func-e")
     return selected_field, FIELDS
 
 def select_indent(FIELDS, selected_field):
-    print(f"{Fore.RED}[Selecting indent]{Style.RESET_ALL}")
+    log("Selecting indent", "func-s")
     fields = []
     fields.extend(FIELDS)
     fields.sort(key=lambda x:x.rect.y)
@@ -166,11 +166,11 @@ def select_indent(FIELDS, selected_field):
             if selected_field.rect.y < field.rect.y < max_height:
                 removed_items.append(field)
 
-    print(f"{Fore.GREEN}[Selecting indent]{Style.RESET_ALL}")
+    log("Selecting indent", "func-e")
     return removed_items
 
 def move_down(amount_added, height_added, FIELDS):
-    print(f"{Fore.RED}[Moving down]{Style.RESET_ALL}")
+    log("Moving down", "func-s")
     fields = []
     fields.extend(FIELDS)
     fields = fields[0:len(FIELDS) - amount_added]
@@ -187,10 +187,10 @@ def move_down(amount_added, height_added, FIELDS):
 
                             item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
                             break
-    print(f"{Fore.GREEN}[Moving down]{Style.RESET_ALL}")
+    log("Moving down", "func-e")
 
 def copy(FIELDS, selected_field, saved):
-    print(f"{Fore.RED}[Copy]{Style.RESET_ALL}")
+    log("Copy", "func-s")
 
     if selected_field != None:
         fields = select_indent(FIELDS, selected_field)
@@ -205,21 +205,19 @@ def copy(FIELDS, selected_field, saved):
         for field in fields:
             field.rect.x += temp
 
-    print(f"{Fore.GREEN}[Copy]{Style.RESET_ALL}")
+    log("Copy", "func-e")
     return saved
 
 def paste(FIELDS, selected_field, copy):
-    print(f"{Fore.RED}[Paste]{Style.RESET_ALL}")
+    log("Paste", "func-s")
     from resize import change_field_width
 
     if copy != None:
         fields, width = load_json(copy, selected_field.rect.width + 70, False, False)
 
-        log("setting x pos", "log")
         for field in fields:
             field.rect.x += selected_field.rect.x
         
-        log("setting y possition", "log")
         temp = fields[0].rect.y
         shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
         for field in fields:
@@ -228,7 +226,6 @@ def paste(FIELDS, selected_field, copy):
             if not shift:
                 field.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
         
-        log("setting old width and x pos", "log")
         for field in fields:
             field.old_w = field.rect.width
             field.old_x = field.rect.x
@@ -237,7 +234,6 @@ def paste(FIELDS, selected_field, copy):
 
         FIELDS.extend(fields)
 
-        log("getting y possitions", "log")
         y_pos = {}
         for field in fields:
             try:
@@ -246,11 +242,10 @@ def paste(FIELDS, selected_field, copy):
                 y_pos[field.rect.y] = [field]
         height_added = 0
 
-        log("getting y possitions", "log")
         for pos in y_pos:
             if (not pos + 10 in y_pos) and (not pos + 5 in y_pos):
                 height_added += 1
         move_down(len(fields), height_added, FIELDS)
 
-    print(f"{Fore.GREEN}[Paste]{Style.RESET_ALL}")
+    log("Paste", "func-e")
     return FIELDS
