@@ -1,4 +1,5 @@
 #importing files
+from dev import log
 import pygame
 from saveload import load_json, save_json
 from Settings import Window
@@ -214,11 +215,11 @@ def paste(FIELDS, selected_field, copy):
     if copy != None:
         fields, width = load_json(copy, selected_field.rect.width + 70, False, False)
 
+        log("setting x pos", "log")
         for field in fields:
             field.rect.x += selected_field.rect.x
         
-        change_field_width(selected_field.rect.width, fields, width + 70)
-
+        log("setting y possition", "log")
         temp = fields[0].rect.y
         shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
         for field in fields:
@@ -227,12 +228,16 @@ def paste(FIELDS, selected_field, copy):
             if not shift:
                 field.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
         
+        log("setting old width and x pos", "log")
         for field in fields:
             field.old_w = field.rect.width
             field.old_x = field.rect.x
 
+        change_field_width(selected_field.rect.width, fields, width + 70)
+
         FIELDS.extend(fields)
 
+        log("getting y possitions", "log")
         y_pos = {}
         for field in fields:
             try:
@@ -240,6 +245,8 @@ def paste(FIELDS, selected_field, copy):
             except:
                 y_pos[field.rect.y] = [field]
         height_added = 0
+
+        log("getting y possitions", "log")
         for pos in y_pos:
             if (not pos + 10 in y_pos) and (not pos + 5 in y_pos):
                 height_added += 1
