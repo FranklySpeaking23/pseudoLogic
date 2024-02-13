@@ -2,12 +2,15 @@
 import pygame
 from saveload import load_json, save_json
 from Settings import Window
+from colorama import Style, Fore
 
 #function to restore program using a backup
 def load_backup(FIELDS, BACKUPS, WIDTH):
+    print(f"{Fore.RED}[Loading backup]{Style.RESET_ALL}")
     if len(BACKUPS) > 0:
         temp = BACKUPS.pop(len(BACKUPS) - 1)
         FIELDS, WIDTH = load_json(temp, WIDTH, False)
+    print(f"{Fore.GREEN}[Loading backup]{Style.RESET_ALL}")
     return FIELDS, BACKUPS
 
 '''def delete_field(selected_field, FIELDS):
@@ -92,6 +95,7 @@ def load_backup(FIELDS, BACKUPS, WIDTH):
         elif hoogte < '''
 
 def delete_field(selected_field, FIELDS):
+    print(f"{Fore.RED}[Deleting fields]{Style.RESET_ALL}")
     fields = []
     fields.extend(FIELDS)
     fields.sort(key=lambda x:x.rect.y)
@@ -130,17 +134,15 @@ def delete_field(selected_field, FIELDS):
 
     #FIELDS = fields
     selected_field = None
+    print(f"{Fore.GREEN}[Deleting fields]{Style.RESET_ALL}")
     return selected_field, FIELDS
 
 def select_indent(FIELDS, selected_field):
+    print(f"{Fore.RED}[Selecting indent]{Style.RESET_ALL}")
     fields = []
     fields.extend(FIELDS)
     fields.sort(key=lambda x:x.rect.y)
     
-    print("_" * 50)
-    for field in fields:
-        print(f"field: {field.type} : {field.rect}")
-    print("_" * 50)
 
     height = selected_field.rect.y
     max_height = None
@@ -156,24 +158,18 @@ def select_indent(FIELDS, selected_field):
     if max_height == None:
         max_height = height + 10
 
-    print(f"max_height: {max_height}")
-    print(f"height: {height}")
 
-    print(f"selected: {selected_field.rect}")
     removed_items = [selected_field]
     for field in FIELDS:
-        print(f"itr: {field.rect}")
         if selected_field.rect.x < field.rect.x < selected_field.rect.x + selected_field.rect.width and field.rect.x + field.rect.width <= selected_field.rect.x + selected_field.rect.width + 10:
-            print(f"pass width: {field.name} : {field.type} : {field.rect}")
             if selected_field.rect.y < field.rect.y < max_height:
-                print(f"pass height: {field.name} : {field.type} : {field.rect}")
                 removed_items.append(field)
 
-
+    print(f"{Fore.GREEN}[Selecting indent]{Style.RESET_ALL}")
     return removed_items
 
 def move_down(amount_added, height_added, FIELDS):
-    print("_" * 50)
+    print(f"{Fore.RED}[Moving down]{Style.RESET_ALL}")
     fields = []
     fields.extend(FIELDS)
     fields = fields[0:len(FIELDS) - amount_added]
@@ -190,8 +186,10 @@ def move_down(amount_added, height_added, FIELDS):
 
                             item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
                             break
+    print(f"{Fore.GREEN}[Moving down]{Style.RESET_ALL}")
 
 def copy(FIELDS, selected_field, saved):
+    print(f"{Fore.RED}[Copy]{Style.RESET_ALL}")
 
     if selected_field != None:
         fields = select_indent(FIELDS, selected_field)
@@ -203,17 +201,16 @@ def copy(FIELDS, selected_field, saved):
         width = selected_field.rect.width
         saved = save_json(fields, width, False)
 
-        print(saved)
         for field in fields:
             field.rect.x += temp
 
-    print(saved)
+    print(f"{Fore.GREEN}[Copy]{Style.RESET_ALL}")
     return saved
 
 def paste(FIELDS, selected_field, copy):
+    print(f"{Fore.RED}[Paste]{Style.RESET_ALL}")
     from resize import change_field_width
 
-    print(copy)
     if copy != None:
         fields, width = load_json(copy, selected_field.rect.width + 70, False, False)
 
@@ -229,6 +226,10 @@ def paste(FIELDS, selected_field, copy):
             field.rect.y += selected_field.rect.y
             if not shift:
                 field.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+        
+        for field in fields:
+            field.old_w = field.rect.width
+            field.old_x = field.rect.x
 
         FIELDS.extend(fields)
 
@@ -244,4 +245,5 @@ def paste(FIELDS, selected_field, copy):
                 height_added += 1
         move_down(len(fields), height_added, FIELDS)
 
+    print(f"{Fore.GREEN}[Paste]{Style.RESET_ALL}")
     return FIELDS

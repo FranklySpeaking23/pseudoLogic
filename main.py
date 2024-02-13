@@ -5,6 +5,7 @@ import update_checker
 import draw
 from resize import window_size, update_button_possitions
 import edit
+from colorama import Fore, Style
 
 #initializing the window
 WIDTH, HEIGHT = Window.WIDTH, Window.HEIGHT
@@ -95,4 +96,6 @@ def main():
 
 #run the program
 if __name__ == "__main__":
+    print(f"{Fore.YELLOW}- Program started{Style.RESET_ALL}")
     main()
+    print(f"{Fore.YELLOW}- Program finished{Style.RESET_ALL}")

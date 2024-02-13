@@ -3,10 +3,11 @@ from design import field
 from Settings import Window, Text
 import pygame
 from edit import move_down
+from colorama import Fore, Style
 
 #function for making a new field
 def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
-
+    print(f"{Fore.RED}[Making field(s)]{Style.RESET_ALL}")
     #making some variables
     amount_added = 0
     height_added = 0
@@ -19,7 +20,6 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         #if the current field is an if- or while-statement and the field needs to be below the current field
         if (selected_field.type == "while" or selected_field.type == "if") and not shift:
 
-            print("-" * 50)
             #getting the height of statement
             hoogte = selected_field.rect.y
             breedte = selected_field.rect.x
@@ -32,9 +32,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
                 if item.rect.x <= selected_field.rect.x and item.rect.x + item.rect.width > selected_field.rect.x:
                     if item.rect.y > selected_field.rect.y:
-                        print("1")
                         if max_height == None or max_height > item.rect.y:
-                            print("2")
                             max_height = item.rect.y
             if max_height == None:
                 max_height = total_height + 10
@@ -71,8 +69,6 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
     #if an error appears (e.g. there is no selected field)
     except AttributeError:
-        print("_" * 50)
-        print("An error!!!")
 
         #setting the new field height
         hoogte = 10
@@ -98,10 +94,10 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         height_added = 1
     elif type == "if":
         FIELDS.append(field(Text.IF_STATEMENT_TEXT, start_pos, (dimensions[0], Window.FIELD_HEIGHT), pass_type, old_x, old_w)),
-        FIELDS.append(field(Text.IF_STATEMENT_LEFT, (start_pos[0] + Window.MARGIN_IF_STATEMENT_LEFT, start_pos[1] + 10), (dimensions[0] / 2 - 15, Window.FIELD_HEIGHT - 10), "if-dan", old_x + Window.MARGIN_IF_STATEMENT_LEFT, old_w / 2 - 15))
-        FIELDS.append(field(Text.IF_STATEMENT_RIGHT, (start_pos[0] + dimensions[0] // 2 + Window.MARGIN_IF_STATEMENT_LEFT/2 + Window.MARGIN_IF_STATEMENT_MIDDLE/2, start_pos[1] + 5), (dimensions[0] / 2 - 15, Window.FIELD_HEIGHT - 5), "if-anders", old_x + old_w // 2 + 25, old_w / 2 - 15))
-        FIELDS.append(field(Text.IF_STATEMENT_B_LEFT, (start_pos[0] + Window.MARGIN_IF_STATEMENT_LEFT, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] / 2 - Window.MARGIN_IF_STATEMENT_LEFT/2 - Window.MARGIN_IF_STATEMENT_MIDDLE/2, Window.FIELD_HEIGHT), "if-sec-T", old_x + Window.MARGIN_IF_STATEMENT_LEFT, old_w / 2 - Window.MARGIN_IF_STATEMENT_LEFT/2 - Window.MARGIN_IF_STATEMENT_MIDDLE/2))
-        FIELDS.append(field(Text.IF_STATEMENT_B_RIGHT, (start_pos[0] + dimensions[0] // 2 + Window.MARGIN_IF_STATEMENT_LEFT/2 + Window.MARGIN_IF_STATEMENT_MIDDLE/2, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] / 2 - Window.MARGIN_IF_STATEMENT_MIDDLE/2 - Window.MARGIN_IF_STATEMENT_LEFT/2, Window.FIELD_HEIGHT), "if-sec-F", old_x + old_w // 2 + Window.MARGIN_IF_STATEMENT_LEFT/2 + Window.MARGIN_IF_STATEMENT_MIDDLE/2, old_w / 2 - Window.MARGIN_IF_STATEMENT_MIDDLE/2 - Window.MARGIN_IF_STATEMENT_LEFT/2))
+        FIELDS.append(field(Text.IF_STATEMENT_LEFT, (start_pos[0] + Window.MARGIN_IF_STATEMENT_LEFT, start_pos[1] + 10), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT - 10), "if-dan", old_x + Window.MARGIN_IF_STATEMENT_LEFT, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
+        FIELDS.append(field(Text.IF_STATEMENT_RIGHT, (start_pos[0] + dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, start_pos[1] + 5), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT - 5), "if-anders", old_x + dimensions[0] // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
+        FIELDS.append(field(Text.IF_STATEMENT_B_LEFT, (start_pos[0] + Window.MARGIN_IF_STATEMENT_LEFT, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT), "if-sec-T", old_x + Window.MARGIN_IF_STATEMENT_LEFT, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
+        FIELDS.append(field(Text.IF_STATEMENT_B_RIGHT, (start_pos[0] + dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT), "if-sec-F", old_x + dimensions[0] // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
         amount_added = 5
         height_added = 2
     elif type == "while":
@@ -160,4 +156,5 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         #setting the selected field to the one that is last added
         selected_field = FIELDS[len(FIELDS) - 1]'''
 
+    print(f"{Fore.GREEN}[Making field(s)]{Style.RESET_ALL}")
     return FIELDS, selected_field

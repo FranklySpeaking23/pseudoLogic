@@ -5,6 +5,7 @@ from Settings import Text, Window
 import make
 import saveload
 import edit
+from colorama import Fore, Style
 
 #function to check if the size of the window changed and take the needed actions
 def window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS):
@@ -15,7 +16,7 @@ def window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS):
 
     #if the width changed
     if nwidth != WIDTH:
-
+        print(f"{Fore.YELLOW}- Width changed{Style.RESET_ALL}")
         #change the width of the fields
         change_field_width(nwidth - 70, FIELDS, WIDTH)
 
@@ -27,7 +28,7 @@ def window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS):
 
     #if the height changed
     if nheight != HEIGHT:
-
+        print(f"{Fore.YELLOW}- Height changed{Style.RESET_ALL}")
         HEIGHT = nheight
 
         #change the positions of the buttons
@@ -37,7 +38,7 @@ def window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS):
 
 #function to update the possitions of the buttons
 def update_button_possitions(BUTTON, WIDTH, HEIGHT):
-
+    print(f"{Fore.RED}[Updating buttons]{Style.RESET_ALL}")
     #remove all buttons
     BUTTON = []
 
@@ -54,11 +55,12 @@ def update_button_possitions(BUTTON, WIDTH, HEIGHT):
     BUTTON.append(buttons(Text.COPY, (110, HEIGHT - 50), (40, 40), edit.copy, None))
     BUTTON.append(buttons(Text.PASTE, (160, HEIGHT - 50), (40, 40), edit.paste, None))
 
-
+    print(f"{Fore.GREEN}[Updating buttons]{Style.RESET_ALL}")
     return BUTTON
 
 #function for changing the width of fields
 def change_field_width(new_field_width, FIELDS, WIDTH):
+    print(f"{Fore.RED}[Updating field size]{Style.RESET_ALL}")
 
     #making a library with all the fields sorted per y position
     lines = {}
@@ -94,7 +96,6 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                 #trying to load the x pos from already changed fields with the same x pos
                 off = old_x[field[1].old_x]
                 field[1].rect.x = off
-                print(field[1].type)
 
             #if the x possition hasn't been used already
             except:
@@ -146,3 +147,5 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
             #adding the field to the adjusted fields list
             adjusted.append(field[1])
             offset += field[1].rect.width + field[1].rect.x - old_width - old_x_pos
+
+    print(f"{Fore.GREEN}[Updating field size]{Style.RESET_ALL}")

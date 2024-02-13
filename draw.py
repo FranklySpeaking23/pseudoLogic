@@ -35,10 +35,13 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
                 if rect.colliderect(comp_rect):
 
                     #check collision with fields
-                    if item.type != "while" and pygame.Rect(rect.x, rect.y, rect.width, Window.FIELD_HEIGHT).colliderect(comp_rect):
-                        collision = True
+                    if pygame.Rect(rect.x, rect.y, rect.width, Window.FIELD_HEIGHT).colliderect(comp_rect):
+                        if (item.type == "while" and Window.SIDEBAR_WHILE_STATEMENT) or (item.type == "if" and Window.SIDEBAR_IF_STATEMENT):
+                            pass
+                        else:
+                            collision = True
                     
-                    if item.type == "while":
+                    if item.type in ["while", "if"]:
                         source = item
                     
             #if no collision with fields other than while-statements
@@ -48,23 +51,27 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
                 for block in blocks:
 
                     #if collision with a previous field (prevent drawing on empty space)
-                    if block.colliderect(rect):
+                    if block[0].colliderect(rect):
 
                         #align rect and draw to screen
-                        rect = pygame.Rect(block.x, rect.y, rect.width, rect.height)
-                        pygame.draw.rect(surface, Colors.WHILE_STATEMENT, rect, Window.BORDER, Window.ROUNDING)
-                        blocks.append(rect)
+                        rect = pygame.Rect(block[0].x, rect.y, rect.width, rect.height)
+                        pygame.draw.rect(surface, block[1], rect, Window.BORDER, Window.ROUNDING)
+                        blocks.append([rect, block[1]])
                         break
 
                 
                 else:
                     if source != None:
                         #if rect touches while-statement
+                        if source.type == "while":
+                            color = Colors.WHILE_STATEMENT
+                        else:
+                            color = Colors.IF_STATEMENT
 
                         #align rect with field and draw to screen
                         rect = pygame.Rect(source.rect.x, source.rect.y - offset, rect.width, rect.height)
-                        pygame.draw.rect(surface, Colors.WHILE_STATEMENT, rect, Window.BORDER, Window.ROUNDING)
-                        blocks.append(rect)
+                        pygame.draw.rect(surface, color, rect, Window.BORDER, Window.ROUNDING)
+                        blocks.append([rect, color])
 
 #function for drawing lines as the background of the application
 def lines(surface, sort, WIDTH, HEIGHT):
@@ -98,6 +105,9 @@ def display(finale_surface, mouse, offset, time, FIELDS, selected_field, BUTTON,
     #drawing the fields and buttons
     for item in FIELDS:
         item.draw(surface, mouse, offset, time, selected_field)
+    for item in FIELDS:
+        if item.type == "if":
+            item.draw(surface, mouse, offset, time, selected_field)
 
     for item in BUTTON:
         item.draw(surface, (mouse[0], mouse[1] - offset), 0, time, selected_field)
