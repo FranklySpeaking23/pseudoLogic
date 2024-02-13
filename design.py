@@ -129,6 +129,8 @@ class buttons:
                 text = self.font.render(txt, 1, Colors.TEXT)
                 counting = 0
                 while mouse[0] < pos[0] + text.get_width():
+                    if len(txt) < 0:
+                        break
                     txt = txt[:-1]
                     text = self.font.render(txt, 1, Colors.TEXT)
                 self.type_location = len(txt)
@@ -149,7 +151,7 @@ class buttons:
             surface.blit(text, pos)
 
     #the action of a button
-    def execute(self, mouse, FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS):
+    def execute(self, mouse, FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY):
 
         #check collision of mouse and button
         if self.rect.collidepoint(mouse) and self.show:
@@ -187,10 +189,14 @@ class buttons:
                     selected_field, FIELDS = self.action(selected_field, FIELDS)
                 elif "load_backup" in str(self.action):
                     FIELDS, BACKUPS = self.action(FIELDS, BACKUPS, WIDTH)
+                elif "copy" in str(self.action):
+                    COPY = self.action(FIELDS, selected_field, COPY)
+                elif "paste" in str(self.action):
+                    FIELDS = self.action(FIELDS, selected_field, COPY)
                 else:
                     self.action()
 
-        return FIELDS, selected_field, BACKUPS
+        return FIELDS, selected_field, BACKUPS, COPY
 
 #main class for the fields
 class field(buttons):

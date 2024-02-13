@@ -24,3 +24,5 @@ FIELD_WHILE_STATEMENT = "W" #the text for the make a repeating-statement button 
 FIELD_FUNCTION = "F"
 FIELD_DELETE = "T" #the text for the delete current field button
 BACK = "B" #the text for the back button
+COPY = "C" #the text for the copy fields button
+PASTE = "P" #the text for the paste fields button

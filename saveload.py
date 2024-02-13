@@ -55,7 +55,7 @@ def save_json(FIELDS, WIDTH, popup=True):
     return save_fields
 
 #loading a save file, also used for loading a backup
-def load_json(FIELDS, WIDTH, popup=True):
+def load_json(FIELDS, WIDTH, popup=True, change=True):
 
     #import needs to be here because design imports the saveload.save_json() function
     from design import field
@@ -91,6 +91,7 @@ def load_json(FIELDS, WIDTH, popup=True):
     print(FIELDS)
 
     #resize all the fields to the current window width
-    resize.change_field_width(WIDTH - 70, FIELDS, width_s)
+    if change:
+        resize.change_field_width(WIDTH - 70, FIELDS, width_s)
 
     return FIELDS, width_s

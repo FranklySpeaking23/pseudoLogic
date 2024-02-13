@@ -23,13 +23,14 @@ FIELD_WIDTH = WIDTH - 70
 def main():
 
     #setting variables
-    global selected_field, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS
+    global selected_field, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS, COPY
     
     selected_field = None
     offset = 0
 
     BUTTON = update_button_possitions(BUTTON, WIDTH, HEIGHT)
     BACKUPS = []
+    COPY = None
 
     active_time = 0
     clock = pygame.time.Clock()
@@ -60,7 +61,7 @@ def main():
 
                 #checkiing button press
                 for item in BUTTON:
-                    FIELDS, selected_field, BACKUPS = item.execute((mouse[0], mouse[1] - offset), FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS)
+                    FIELDS, selected_field, BACKUPS, COPY = item.execute((mouse[0], mouse[1] - offset), FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY)
 
                 selected_field = None
 

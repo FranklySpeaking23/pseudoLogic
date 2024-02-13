@@ -1,5 +1,6 @@
 #importing files
-from saveload import load_json
+import pygame
+from saveload import load_json, save_json
 from Settings import Window
 
 #function to restore program using a backup
@@ -94,48 +95,13 @@ def delete_field(selected_field, FIELDS):
     fields = []
     fields.extend(FIELDS)
     fields.sort(key=lambda x:x.rect.y)
-    
-    print("_" * 50)
-    for field in fields:
-        print(f"field: {field.type} : {field.rect}")
-    print("_" * 50)
 
-    height = selected_field.rect.y
-    max_height = None
-    for field in fields:
-        if field.rect.y > height:
-            height = field.rect.y
-
-        if field.rect.x <= selected_field.rect.x and field.rect.x + field.rect.width > selected_field.rect.x:
-            if field.rect.y > selected_field.rect.y: 
-                if max_height == None or field.rect.y < max_height:
-                    max_height = field.rect.y
-
-    if max_height == None:
-        max_height = height + 10
-
-    print(f"max_height: {max_height}")
-    print(f"height: {height}")
-
-    removed = 0
-
-    print(f"selected: {selected_field.rect}")
-    removed_items = []
-    for field in fields:
-        print(f"itr: {field.rect}")
-        if selected_field.rect.x < field.rect.x < selected_field.rect.x + selected_field.rect.width and field.rect.x + field.rect.width <= selected_field.rect.x + selected_field.rect.width + 10:
-            print(f"pass width: {field.name} : {field.type} : {field.rect}")
-            if selected_field.rect.y < field.rect.y < max_height:
-                print(f"pass height: {field.name} : {field.type} : {field.rect}")
-                removed += 1
-                removed_items.append(field)
+    removed_items = select_indent(FIELDS, selected_field)
     for item in removed_items:
         fields.remove(item)
         FIELDS.remove(item)
 
-    removed += 1
-    fields.remove(selected_field)
-    FIELDS.remove(selected_field)
+    removed = len (removed_items)
 
     for k in range(removed):
         for i, field in enumerate(fields):
@@ -165,3 +131,117 @@ def delete_field(selected_field, FIELDS):
     #FIELDS = fields
     selected_field = None
     return selected_field, FIELDS
+
+def select_indent(FIELDS, selected_field):
+    fields = []
+    fields.extend(FIELDS)
+    fields.sort(key=lambda x:x.rect.y)
+    
+    print("_" * 50)
+    for field in fields:
+        print(f"field: {field.type} : {field.rect}")
+    print("_" * 50)
+
+    height = selected_field.rect.y
+    max_height = None
+    for field in fields:
+        if field.rect.y > height:
+            height = field.rect.y
+
+        if field.rect.x <= selected_field.rect.x and field.rect.x + field.rect.width > selected_field.rect.x:
+            if field.rect.y > selected_field.rect.y: 
+                if max_height == None or field.rect.y < max_height:
+                    max_height = field.rect.y
+
+    if max_height == None:
+        max_height = height + 10
+
+    print(f"max_height: {max_height}")
+    print(f"height: {height}")
+
+    print(f"selected: {selected_field.rect}")
+    removed_items = [selected_field]
+    for field in FIELDS:
+        print(f"itr: {field.rect}")
+        if selected_field.rect.x < field.rect.x < selected_field.rect.x + selected_field.rect.width and field.rect.x + field.rect.width <= selected_field.rect.x + selected_field.rect.width + 10:
+            print(f"pass width: {field.name} : {field.type} : {field.rect}")
+            if selected_field.rect.y < field.rect.y < max_height:
+                print(f"pass height: {field.name} : {field.type} : {field.rect}")
+                removed_items.append(field)
+
+
+    return removed_items
+
+def move_down(amount_added, height_added, FIELDS):
+    print("_" * 50)
+    fields = []
+    fields.extend(FIELDS)
+    fields = fields[0:len(FIELDS) - amount_added]
+    fields.sort(key=lambda x:x.rect.y)
+    if fields != None:
+        for i in range(height_added):
+            for item in fields:
+                for r in FIELDS:
+                    if item.rect.colliderect(r.rect) and r != item and (not item.type in ["if-dan", "if-anders"]):
+                        if (item.type == "if" and (not r.type in ["if-dan", "if-anders"])) or item.type != "if":
+                            if item.type == "if":
+                                FIELDS[FIELDS.index(item) + 1].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                                FIELDS[FIELDS.index(item) + 2].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+
+                            item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                            break
+
+def copy(FIELDS, selected_field, saved):
+
+    if selected_field != None:
+        fields = select_indent(FIELDS, selected_field)
+
+        temp = selected_field.rect.x
+        for field in fields:
+            field.rect.x -= temp
+
+        width = selected_field.rect.width
+        saved = save_json(fields, width, False)
+
+        print(saved)
+        for field in fields:
+            field.rect.x += temp
+
+    print(saved)
+    return saved
+
+def paste(FIELDS, selected_field, copy):
+    from resize import change_field_width
+
+    print(copy)
+    if copy != None:
+        fields, width = load_json(copy, selected_field.rect.width + 70, False, False)
+
+        for field in fields:
+            field.rect.x += selected_field.rect.x
+        
+        change_field_width(selected_field.rect.width, fields, width + 70)
+
+        temp = fields[0].rect.y
+        shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
+        for field in fields:
+            field.rect.y -= temp
+            field.rect.y += selected_field.rect.y
+            if not shift:
+                field.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+
+        FIELDS.extend(fields)
+
+        y_pos = {}
+        for field in fields:
+            try:
+                y_pos[field.rect.y].append(field)
+            except:
+                y_pos[field.rect.y] = [field]
+        height_added = 0
+        for pos in y_pos:
+            if (not pos + 10 in y_pos) and (not pos + 5 in y_pos):
+                height_added += 1
+        move_down(len(fields), height_added, FIELDS)
+
+    return FIELDS

@@ -2,6 +2,7 @@
 from design import field
 from Settings import Window, Text
 import pygame
+from edit import move_down
 
 #function for making a new field
 def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
@@ -116,8 +117,8 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
 
     #moving the other fields
-    
-    print("_" * 50)
+    move_down(amount_added, height_added, FIELDS)
+    '''print("_" * 50)
     fields = []
     fields.extend(FIELDS)
     fields = fields[0:len(FIELDS) - amount_added]
@@ -137,7 +138,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
                             print(item.rect, ":", r.rect)
                             item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
-                            break
+                            break'''
 
 
     '''if selected_field != None:

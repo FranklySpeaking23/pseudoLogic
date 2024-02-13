@@ -4,3 +4,6 @@ make.py
 #            - what if field is in another if statement
 #        - moving the fields
 #            - skipping a field
+edit.py
+    - paste
+        - fields used the entire space --> not able to replicate

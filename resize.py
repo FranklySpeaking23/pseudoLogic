@@ -51,6 +51,9 @@ def update_button_possitions(BUTTON, WIDTH, HEIGHT):
     BUTTON.append(buttons(Text.LOAD_JSON, (WIDTH - 50, HEIGHT - 150), (40, 40), saveload.load_json, None))
     BUTTON.append(buttons(Text.FIELD_DELETE, (60, HEIGHT - 50), (40, 40), edit.delete_field, None))
     BUTTON.append(buttons(Text.BACK, (10, HEIGHT - 50), (40, 40), edit.load_backup, None))
+    BUTTON.append(buttons(Text.COPY, (110, HEIGHT - 50), (40, 40), edit.copy, None))
+    BUTTON.append(buttons(Text.PASTE, (160, HEIGHT - 50), (40, 40), edit.paste, None))
+
 
     return BUTTON
 
@@ -91,6 +94,7 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                 #trying to load the x pos from already changed fields with the same x pos
                 off = old_x[field[1].old_x]
                 field[1].rect.x = off
+                print(field[1].type)
 
             #if the x possition hasn't been used already
             except:
