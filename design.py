@@ -130,9 +130,10 @@ class buttons:
                 text = self.font.render(txt, 1, Colors.TEXT)
                 counting = 0
                 while mouse[0] < pos[0] + text.get_width():
-                    if len(txt) < 0:
+                    if len(self.name) < counting:
                         break
                     txt = txt[:-1]
+                    counting += 1
                     text = self.font.render(txt, 1, Colors.TEXT)
                 self.type_location = len(txt)
 

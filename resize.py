@@ -69,6 +69,10 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
             lines[field.rect.y] = [[field.rect.x, field]]
         else:
             lines[field.rect.y].append([field.rect.x, field])
+    myKeys = list(lines.keys())
+    myKeys.sort()
+    sorted_dict = {i: lines[i] for i in myKeys}
+    lines = sorted_dict
 
     #declaring variables
     old_x = {}
@@ -111,11 +115,11 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                     if field[1].type in ["if-dan", "if-sec-T"]:
                         field[1].rect.x = main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT
                     if field[1].type in ["if-dan", "if-anders"]:
-                        field[1].rect.width = main.rect.width / 2 - 15
+                        field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE //2 - Window.MARGIN_IF_STATEMENT_LEFT // 2
                     if field[1].type in ["if-anders"]:
-                        field[1].rect.x = main.rect.x + main.rect.width/2 + 25
+                        field[1].rect.x = main.rect.x + main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE
                     if field[1].type in ["if-sec-T", "if-sec-F"]:
-                        field[1].rect.width = main.rect.width / 2 - Window.MARGIN_IF_STATEMENT_LEFT / 2 - Window.MARGIN_IF_STATEMENT_MIDDLE / 2
+                        field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2
                     if field[1].type in ["if-sec-F"]:
                         pre = FIELDS[FIELDS.index(field[1]) - 1]
                         field[1].rect.x = pre.rect.x + pre.rect.width + Window.MARGIN_IF_STATEMENT_MIDDLE
