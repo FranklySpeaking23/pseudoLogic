@@ -3,7 +3,6 @@ from saveload import save_json
 import pygame
 from Settings import Colors, Text, Window
 pygame.font.init()
-import edit
 from colorama import Fore, Style
 
 #class for the buttons and second class for the fields
@@ -221,7 +220,8 @@ class field(buttons):
             #changig the selected field
             selected_field = self
 
-            print(f"{Fore.BLUE}field = (\n[type] {self.type}\n[name] {self.name}\n[rect] {self.rect}\n[old] ({self.old_x},{self.old_w})\n){Style.RESET_ALL}")
+            if Window.LOGS:
+                print(f"{Fore.BLUE}field = (\n[type] {self.type}\n[name] {self.name}\n[rect] {self.rect}\n[old] ({self.old_x},{self.old_w})\n){Style.RESET_ALL}")
 
         return selected_field
     

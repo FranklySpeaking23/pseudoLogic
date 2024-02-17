@@ -213,6 +213,7 @@ def paste(FIELDS, selected_field, copy):
     from resize import change_field_width
 
     if copy != None:
+        print(copy)
         fields, width = load_json(copy, selected_field.rect.width + 70, False, False)
 
         for field in fields:
@@ -230,6 +231,7 @@ def paste(FIELDS, selected_field, copy):
             field.old_w = field.rect.width
             field.old_x = field.rect.x
 
+        log(f"{selected_field.rect.width}", "log")
         change_field_width(selected_field.rect.width, fields, width + 70)
 
         FIELDS.extend(fields)

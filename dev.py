@@ -1,7 +1,8 @@
 from colorama import Fore, Style
+from Settings.Window import LOGS
 
 def log(tekst, type = "default"):
-    if True:
+    if LOGS:
         match type:
             case "default":
                 print(tekst)

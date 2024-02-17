@@ -2,9 +2,9 @@
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
-from colorama import Fore, Style
+from dev import log
 
-print(f"{Fore.RED}[Checking updates]{Style.RESET_ALL}")
+log("Checking updates", "func-s")
 try:
     #load the webpage with the newest version number
     url = "https://raw.githubusercontent.com/FranklySpeaking23/pseudoLogic/main/version.txt?token=GHSAT0AAAAAACNNTZMMU63BBG2EHU4YTIPCZNWB4FA"
@@ -28,4 +28,4 @@ except:
     print("Kijken voor nieuwe versie mislukt.")
     sleep(3)
 
-print(f"{Fore.GREEN}[Checking updates]{Style.RESET_ALL}")
+log("Checking updates", "func-e")

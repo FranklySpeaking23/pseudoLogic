@@ -91,7 +91,11 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
 
             #changing the width of the field
             old_width = field[1].rect.width
+            log(f"new f w: {new_field_width}", "log")
+            log(new_field_width / (WIDTH - 70))
+            log(f"w: {field[1].rect.width}", "log")
             field[1].rect.width = field[1].rect.width * ((new_field_width / (WIDTH - 70)))
+            log(field[1].rect.width, "log")
 
             #changing the x pos
             old_x_pos = field[1].rect.x

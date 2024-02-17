@@ -5,11 +5,11 @@ import pygame
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import draw
 from json import dump, load
-from colorama import Fore, Style
+from dev import log
 
 #function to save the diagram as an image (.png)
 def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
-    print(f"{Fore.RED}[Saving image]{Style.RESET_ALL}")
+    log("Saving image", "func-s")
     #getting the height of all fields
     hoogte = 10
     for item in FIELDS:
@@ -30,17 +30,17 @@ def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
     if name != "":
         pygame.image.save(surface, f"{name}.png")
 
-    print(f"{Fore.GREEN}[Saving image]{Style.RESET_ALL}")
+    log("Saving image", "func-e")
 
 #function to save the diagram as a json file (.json), this function is also used to make a backup
 def save_json(FIELDS, WIDTH, popup=True):
-    print(f"{Fore.RED}[Saving json]{Style.RESET_ALL}")
+    log("Saving json", "func-s")
     #remebering the width the screen had at the time of saving
     save_fields = [WIDTH]
 
     #adding all essential parameters for each field to the save list
     for field in FIELDS:
-        lijst = [field.name, field.rect.topleft, field.dimensions, field.type, field.old_x, field.old_w, field.border]
+        lijst = [field.name, field.rect.topleft, (field.rect.width, field.rect.height), field.type, field.old_x, field.old_w, field.border]
         save_fields.append(lijst)
 
     #if the file needs to be stored (not when making a backup)
@@ -54,12 +54,12 @@ def save_json(FIELDS, WIDTH, popup=True):
             with open(f"{name}.json", "w") as file:
                 dump(save_fields, file)
 
-    print(f"{Fore.GREEN}[Saving json]{Style.RESET_ALL}") 
+    log("Saving json", "func-e")
     return save_fields
 
 #loading a save file, also used for loading a backup
 def load_json(FIELDS, WIDTH, popup=True, change=True):
-    print(f"{Fore.RED}[Loading json]{Style.RESET_ALL}")
+    log("Loading json", "func-s")
 
     #import needs to be here because design imports the saveload.save_json() function
     from design import field
@@ -94,5 +94,5 @@ def load_json(FIELDS, WIDTH, popup=True, change=True):
     if change:
         resize.change_field_width(WIDTH - 70, FIELDS, width_s)
 
-    print(f"{Fore.GREEN}[Loading json]{Style.RESET_ALL}")
+    log("Loading json", "func-e")
     return FIELDS, width_s

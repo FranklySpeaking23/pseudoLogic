@@ -7,3 +7,4 @@ make.py
 edit.py
     - paste
         - fields used the entire space --> not able to replicate
+        - fields become to small after copy paste and going from larger to smaller width (of the field)
