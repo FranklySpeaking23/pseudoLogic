@@ -2,6 +2,7 @@
 from saveload import save_json
 import pygame
 from Settings import Colors, Text, Window
+from edit import check_prop
 pygame.font.init()
 from colorama import Fore, Style
 
@@ -193,7 +194,7 @@ class buttons:
                 elif "copy" in str(self.action):
                     COPY = self.action(FIELDS, selected_field, COPY)
                 elif "paste" in str(self.action):
-                    FIELDS = self.action(FIELDS, selected_field, COPY)
+                    FIELDS = self.action(FIELDS, selected_field, COPY, WIDTH)
                 else:
                     self.action()
 
@@ -259,5 +260,7 @@ class field(buttons):
 
             #moving the cursor
             selected_field.type_location += len(temp)
+
+            check_prop(self)
 
         return selected_field

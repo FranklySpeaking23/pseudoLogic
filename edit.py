@@ -3,7 +3,7 @@ from dev import log
 import pygame
 from saveload import load_json, save_json
 from Settings import Window
-from dev import log
+from json import loads
 
 #function to restore program using a backup
 def load_backup(FIELDS, BACKUPS, WIDTH):
@@ -208,7 +208,7 @@ def copy(FIELDS, selected_field, saved):
     log("Copy", "func-e")
     return saved
 
-def paste(FIELDS, selected_field, copy):
+def paste(FIELDS, selected_field, copy, WIDTH):
     log("Paste", "func-s")
     from resize import change_field_width
 
@@ -227,14 +227,18 @@ def paste(FIELDS, selected_field, copy):
             if not shift:
                 field.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
         
-        for field in fields:
-            field.old_w = field.rect.width
-            field.old_x = field.rect.x
+        '''for field in fields:
+            field.old_w = field.rect.width / (WIDTH / Window.WIDTH)
+            field.old_x = field.rect.x '''
 
         log(f"{selected_field.rect.width}", "log")
         change_field_width(selected_field.rect.width, fields, width + 70)
 
         FIELDS.extend(fields)
+
+        for field in FIELDS:
+            field.old_w = field.rect.width
+            field.old_x = field.rect.x
 
         y_pos = {}
         for field in fields:
@@ -251,3 +255,35 @@ def paste(FIELDS, selected_field, copy):
 
     log("Paste", "func-e")
     return FIELDS
+
+def check_prop(selected_field):
+    if selected_field != None and "prop" in selected_field.name:
+        try:
+            prop = selected_field.name.split("prop")[1]
+            print(prop)
+            prop = prop.split("}")[0] + "}"
+            prop = loads(prop)
+            print(prop)
+            if "type" in prop:
+                name = prop["type"]
+                if name in ["default", "if", "if-dan", "if-anders", "if-sec-T", "if-sec-F", "while", "while-sec"]:
+                    selected_field.type = name
+            if "rect" in prop:
+                try:
+                    selected_field.rect.x = prop["rect"][0]
+                    selected_field.rect.y = prop["rect"][1]
+                    selected_field.rect.width = prop["rect"][2]
+                    selected_field.rect.height = prop["rect"][3]
+                except:
+                    pass
+            if "old_x" in prop:
+                selected_field.old_x = prop["old_x"]
+            if "old_w" in prop:
+                selected_field.old_w = prop["old_w"]
+            if "show" in prop:
+                selected_field.show = prop["show"]
+            if "border" in prop:
+                selected_field.border = prop["border"]
+
+        except:
+            pass
