@@ -6,5 +6,9 @@ make.py
 #            - skipping a field
 edit.py
     - paste
-        - fields used the entire space --> not able to replicate
-        - fields become to small after copy paste and going from larger to smaller width (of the field)
+#        - fields used the entire space --> not able to replicate
+#        - fields become to small after copy paste and going from larger to smaller width (of the field)
+
+resize.py
+    - change_field_width
+        - if-dan fields sometimes are to small / large

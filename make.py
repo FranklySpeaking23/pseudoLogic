@@ -16,6 +16,8 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
     shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
 
     try:
+        #setting a dimension for new fields
+        dimensions = (selected_field.rect.width, selected_field.rect.height)
 
         #if the current field is an if- or while-statement and the field needs to be below the current field
         if (selected_field.type == "while" or selected_field.type == "if") and not shift:
@@ -44,7 +46,21 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
             #setting a start possition and type for new fields
             start_pos = (breedte, hoogte)
-            pass_type = type
+            main = None
+            for item in FIELDS:
+                if item.rect.x < start_pos[0] and item.rect.x + item.rect.width >= start_pos[0] + dimensions[0] and item.rect.y < start_pos[1]:
+                    if main == None or item.rect.y > main.rect.y:
+                        main = item
+            if main == None or type != "default":
+                pass_type = type
+            else:
+                if main.type == "while":
+                    pass_type = FIELDS[FIELDS.index(main) + 1].type
+                elif main.type == "if":
+                    if start_pos[0] > main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT + 3:
+                        pass_type = FIELDS[FIELDS.index(main) + 4].type
+                    else:
+                        pass_type = FIELDS[FIELDS.index(main) + 3].type
 
         else:
 
@@ -55,9 +71,6 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
                 pass_type = selected_field.type
             else:
                 pass_type = type
-
-        #setting a dimension for new fields
-        dimensions = (selected_field.rect.width, selected_field.rect.height)
 
 
         old_x = selected_field.old_x
@@ -85,7 +98,22 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         pass_type = type
 
     if shift:
-        pass_type = type
+        main = None
+        for item in FIELDS:
+            if item.rect.x < start_pos[0] and item.rect.x + item.rect.width >= start_pos[0] + dimensions[0] and item.rect.y < start_pos[1]:
+                if main == None or item.rect.y > main.rect.y:
+                    main = item
+        if main == None or type != "default":
+            pass_type = type
+        else:
+            if main.type == "while":
+                pass_type = FIELDS[FIELDS.index(main) + 1].type
+            elif main.type == "if":
+                if start_pos[0] > main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT + 3:
+                    pass_type = FIELDS[FIELDS.index(main) + 4].type
+                else:
+                    pass_type = FIELDS[FIELDS.index(main) + 3].type
+
 
     #making the new field(s) based on the type of the field(s)
     if type == "default":
@@ -155,6 +183,10 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
                 
         #setting the selected field to the one that is last added
         selected_field = FIELDS[len(FIELDS) - 1]'''
+
+    for item in FIELDS:
+        item.old_x = item.rect.x
+        item.old_w = item.rect.width
 
     log("Making fields", "func-e")
     return FIELDS, selected_field

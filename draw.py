@@ -11,9 +11,31 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
         if item.rect.y > hoogte:
             hoogte = item.rect.y
 
-    repetition = hoogte + 10
+    hoogte = hoogte + 10
 
-    #iterating through the width of the screen
+    for field in FIELDS:
+        if (field.type == "while" and Window.SIDEBAR_WHILE_STATEMENT) or (field.type == "if" and Window.SIDEBAR_IF_STATEMENT):
+            if field.type == "if":
+                breedte = Window.WIDTH_SIDEBAR_IF_STATEMENT
+                color = Colors.IF_STATEMENT
+            else:
+                breedte = Window.WIDTH_SIDEBAR_WHILE_STATEMENT
+                color = Colors.WHILE_STATEMENT
+            rect = pygame.Rect(field.rect.x, field.rect.y, breedte, Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+            run = True
+            while run and rect.y < hoogte:
+                cont = True
+                for item in FIELDS:
+                    if rect.colliderect(item) and item != field:
+                        run = False
+                        cont = False
+                        break
+                if not cont:
+                    continue
+                pygame.draw.rect(surface, color, pygame.Rect(rect.x, rect.y - offset, rect.width, rect.height + 5), Window.BORDER, Window.ROUNDING)
+                rect.y += Window.MARGIN_HEIGHT + Window.FIELD_HEIGHT
+
+    '''#iterating through the width of the screen
     for breedte in range(start, WIDTH - 50, Window.WIDTH_SIDEBAR_WHILE_STATEMENT):
         blocks = []
 
@@ -71,7 +93,7 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
                         #align rect with field and draw to screen
                         rect = pygame.Rect(source.rect.x, source.rect.y - offset, rect.width, rect.height)
                         pygame.draw.rect(surface, color, rect, Window.BORDER, Window.ROUNDING)
-                        blocks.append([rect, color])
+                        blocks.append([rect, color])'''
 
 #function for drawing lines as the background of the application
 def lines(surface, sort, WIDTH, HEIGHT):
