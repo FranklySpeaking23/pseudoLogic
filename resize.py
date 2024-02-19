@@ -134,19 +134,22 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                 old_x[field[1].old_x] = field[1].rect.x
             
             #adjusting the width to match the one from the parent
-            if field[1].type in ["if-dan", "if-anders"]:
-                        if field[1].type == "if-dan":
-                            main = FIELDS[FIELDS.index(field[1]) - 1]
-                        elif field[1].type == "if-anders":
-                            main = FIELDS[FIELDS.index(field[1]) - 2]
-                        field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE //2 - Window.MARGIN_IF_STATEMENT_LEFT // 2
-                        print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
-            if field[1].type in ["if-sec-T", "if-sec-F"]:
-                        if field[1].type == "if-sec-T":
-                            main = FIELDS[FIELDS.index(field[1]) - 3]
-                        elif field[1].type == "if-sec-F":
-                            main = FIELDS[FIELDS.index(field[1]) - 4]
-                        field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2
+            try:
+                if field[1].type in ["if-dan", "if-anders"]:
+                            if field[1].type == "if-dan":
+                                main = FIELDS[FIELDS.index(field[1]) - 1]
+                            elif field[1].type == "if-anders":
+                                main = FIELDS[FIELDS.index(field[1]) - 2]
+                            field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE //2 - Window.MARGIN_IF_STATEMENT_LEFT // 2
+                            print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
+                if field[1].type in ["if-sec-T", "if-sec-F"]:
+                            if field[1].type == "if-sec-T":
+                                main = FIELDS[FIELDS.index(field[1]) - 3]
+                            elif field[1].type == "if-sec-F":
+                                main = FIELDS[FIELDS.index(field[1]) - 4]
+                            field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2
+            except:
+                 pass
             if field[1].type == "if-anders":
                 field[1].rect.width = FIELDS[FIELDS.index(field[1]) - 2].rect.x + FIELDS[FIELDS.index(field[1]) - 2].rect.width - field[1].rect.x
             elif field[1].type == "if-sec-F" and FIELDS[FIELDS.index(field[1]) - 4].type == "if":

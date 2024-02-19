@@ -154,10 +154,10 @@ class buttons:
             self.rect.y += offset
 
         #writing the text underneath the mouse
-        if self.rect.collidepoint(mouse):
+        '''if self.rect.collidepoint(mouse):
             text = self.font.render(f"{self.name}, x:{self.rect.x}, y:{self.rect.y}", 1, Colors.TEXT)
             pos = (mouse[0], mouse[1] - offset)
-            surface.blit(text, pos)
+            surface.blit(text, pos)'''
 
     #the action of a button
     def execute(self, mouse, FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY):
