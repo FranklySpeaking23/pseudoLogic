@@ -260,8 +260,10 @@ def check_prop(selected_field):
     if selected_field != None and "prop" in selected_field.name:
         try:
             prop = selected_field.name.split("prop")[1]
+            print(prop)
             prop = prop.split("}")[0] + "}"
             prop = loads(prop)
+            print(prop)
             if "type" in prop:
                 name = prop["type"]
                 if name in ["default", "if", "if-dan", "if-anders", "if-sec-T", "if-sec-F", "while", "while-sec"]:
