@@ -52,7 +52,7 @@ def update_button_possitions(BUTTON, WIDTH, HEIGHT):
     BUTTON.append(buttons(Text.LOAD_JSON, (WIDTH - 50, HEIGHT - 150), (40, 40), saveload.load_json, None))
     BUTTON.append(buttons(Text.FIELD_DELETE, (60, HEIGHT - 50), (40, 40), edit.delete_field, None))
     BUTTON.append(buttons(Text.BACK, (10, HEIGHT - 50), (40, 40), edit.load_backup, None))
-    BUTTON.append(buttons(Text.COPY, (110, HEIGHT - 50), (40, 40), edit.copy, None))
+    BUTTON.append(buttons(Text.COPY, (110, HEIGHT - 50), (40, 40), edit.copy, None, image="Images/copy.png"))
     BUTTON.append(buttons(Text.PASTE, (160, HEIGHT - 50), (40, 40), edit.paste, None))
 
     log("Updating buttons", "func-e")

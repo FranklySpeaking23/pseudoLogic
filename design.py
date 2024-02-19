@@ -10,7 +10,7 @@ from colorama import Fore, Style
 class buttons:
     
     #initializing a button
-    def __init__(self, name, pos, dimensions, action, argument = None, border = 0, font = pygame.font.SysFont(Text.BUTTONS_FONT, Text.BUTTONS_FONT_SIZE), show = True, permanent = True, type = "default", old_x = None, old_w = None, FIELD_WIDTH = Window.WIDTH):
+    def __init__(self, name, pos, dimensions, action, argument = None, border = 0, font = pygame.font.SysFont(Text.BUTTONS_FONT, Text.BUTTONS_FONT_SIZE), show = True, permanent = True, type = "default", old_x = None, old_w = None, FIELD_WIDTH = Window.WIDTH, image=None):
         
         #making the rect
         self.rect = pygame.Rect(pos[0], pos[1], dimensions[0], dimensions[1])
@@ -39,6 +39,8 @@ class buttons:
         self.permanent = permanent
         self.type = type
         self.type_location = 0
+        if image != None:
+            self.image = pygame.image.load(image)
 
     #drawing the button
     def draw(self, surface, mouse, offset, time, selected_field):
@@ -99,6 +101,11 @@ class buttons:
                 pygame.draw.rect(surface, color, self.rect, self.border, Window.ROUNDING)
         except:
             pygame.draw.rect(surface, color, self.rect, self.border, Window.ROUNDING)
+
+        try:
+            surface.blit(self.image, self.rect.topleft)
+        except:
+            pass
 
         #render the text of the button/field
         text = self.font.render(self.name, 1, Colors.TEXT)

@@ -87,6 +87,7 @@ def load_json(FIELDS, WIDTH, popup=True, change=True):
         #load all the fields from the save_fields list
         for item in save_fields:
             FIELDS.append(field(item[0], item[1], item[2], item[3], item[4], item[5], item[6])) #name, pos, dimensions, type, old_x = None, old_w = None, border = 0, show=True, font = pygame.font.SysFont(theme.FIELDS_FONT, theme.FIELDS_FONT_SIZE)
+        save_fields.insert(0, width_s)
     except:
         width_s = WIDTH
 
