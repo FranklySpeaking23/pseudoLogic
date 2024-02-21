@@ -1,16 +1,18 @@
 #importing files
 from saveload import save_json
 import pygame
-from Settings import Colors, Text, Window
 from edit import check_prop
 pygame.font.init()
 from colorama import Fore, Style
+from dev import load_settings
+
+SETTINGS = load_settings()
 
 #class for the buttons and second class for the fields
 class buttons:
     
     #initializing a button
-    def __init__(self, name, pos, dimensions, action, argument = None, border = 0, font = pygame.font.SysFont(Text.BUTTONS_FONT, Text.BUTTONS_FONT_SIZE), show = True, permanent = True, type = "default", old_x = None, old_w = None, FIELD_WIDTH = Window.WIDTH, image=None):
+    def __init__(self, name, pos, dimensions, action, argument = None, border = 0, font = pygame.font.SysFont(SETTINGS["text"]["font"]["button_font"], SETTINGS["text"]["font"]["button_font_size"]), show = True, permanent = True, type = "default", old_x = None, old_w = None, FIELD_WIDTH = SETTINGS["window"]["width"], image=None):
         
         #making the rect
         self.rect = pygame.Rect(pos[0], pos[1], dimensions[0], dimensions[1])
@@ -32,10 +34,10 @@ class buttons:
         self.show = show
         self.font = font
         self.argument = argument
-        if Window.BORDER == None:
+        if SETTINGS["field"]["border"] == None:
             self.border = border
         else:
-            self.border = Window.BORDER
+            self.border = SETTINGS["field"]["border"]
         self.permanent = permanent
         self.type = type
         self.type_location = 0
@@ -49,37 +51,33 @@ class buttons:
 
         #hover over button
         if self.rect.collidepoint(mouse) and self.type != "if-dan" and self.type != "if-anders":
-            color = Colors.HOVER
+            color = SETTINGS["color"]["hover"]
 
         #selected button
         elif self == selected_field:
-            color = Colors.SELECTED
+            color = SETTINGS["color"]["selected"]
 
         #based on type
         else:
             try:
                 if self.type == "if":
-                    color = Colors.IF_STATEMENT
+                    color = SETTINGS["color"]["if"]
                 elif self.type == "if-dan":
-                    color = Colors.IF_THAN
+                    color = SETTINGS["color"]["if_than"]
                 elif self.type == "if-anders":
-                    color = Colors.IF_ELSE
+                    color = SETTINGS["color"]["if_else"]
                 elif self.type == "while":
-                    color = Colors.WHILE_STATEMENT
-                elif self.type == "function":
-                    color = Colors.FUNCTION
+                    color = SETTINGS["color"]["while"]
                 elif self.type == "if-sec-T":
-                    color = Colors.SUB_IF_TRUE_STATEMENT
+                    color = SETTINGS["color"]["sub_if_than"]
                 elif self.type == "if-sec-F":
-                    color = Colors.SUB_IF_FALSE_STATEMENT
+                    color = SETTINGS["color"]["sub_if_else"]
                 elif self.type == "while-sec":
-                    color = Colors.SUB_WHILE_STATEMENT
-                elif self.type == "function-sec":
-                    color = Colors.SUB_FUNCTION
+                    color = SETTINGS["color"]["sub_while"]
                 else:
-                    color = Colors.FIELD
+                    color = SETTINGS["color"]["field"]
             except:
-                color = Colors.FIELD
+                color = SETTINGS["color"]["field"]
         
         #adjusting the position to the offset
         if not self.permanent:
@@ -92,15 +90,15 @@ class buttons:
                 pygame.draw.polygon(surface, color, [self.rect.topleft, self.rect.topright, self.rect.midbottom], self.border)
             elif self.type == "if-dan":
                 pygame.draw.polygon(surface, color, [self.rect.topleft, self.rect.bottomright, self.rect.bottomleft], self.border)
-                pygame.draw.line(surface, Colors.IF_THAN_LINE, self.rect.topleft, self.rect.bottomright, Window.IF_LINE_WIDTH)
+                pygame.draw.line(surface, SETTINGS["color"]["if_than_line"], self.rect.topleft, self.rect.bottomright, SETTINGS["field"]["width_if_line"])
             elif self.type == "if-anders":
                 pygame.draw.polygon(surface, color, [self.rect.bottomleft, self.rect.topright, self.rect.bottomright], self.border)
-                pygame.draw.line(surface, Colors.IF_ELSE_LINE, self.rect.bottomleft, self.rect.topright, Window.IF_LINE_WIDTH)
+                pygame.draw.line(surface, SETTINGS["color"]["if_else_line"], self.rect.bottomleft, self.rect.topright, SETTINGS["field"]["width_if_line"])
             else:
                 #draw the rectangle for other buttons/fields
-                pygame.draw.rect(surface, color, self.rect, self.border, Window.ROUNDING)
+                pygame.draw.rect(surface, color, self.rect, self.border, SETTINGS["field"]["rounding"])
         except:
-            pygame.draw.rect(surface, color, self.rect, self.border, Window.ROUNDING)
+            pygame.draw.rect(surface, color, self.rect, self.border, SETTINGS["field"]["rounding"])
 
         try:
             surface.blit(self.image, self.rect.topleft)
@@ -108,7 +106,7 @@ class buttons:
             pass
 
         #render the text of the button/field
-        text = self.font.render(self.name, 1, Colors.TEXT)
+        text = self.font.render(self.name, 1, SETTINGS["color"]["text"])
         index = -1
 
         #changing the amount of characters that get shown based on the width that is available
@@ -116,7 +114,7 @@ class buttons:
             if abs(index) >= len(self.name):
                 break
             txt = self.name[0:index]
-            text = self.font.render(txt, 1, Colors.TEXT)
+            text = self.font.render(txt, 1, SETTINGS["color"]["text"])
             index -= 1
 
         #possitioning the text based on the type of the button/field
@@ -134,20 +132,20 @@ class buttons:
         if self == selected_field:
             if pygame.mouse.get_pressed()[0] and pos[1] < mouse[1] < pos[1] + text.get_height():
                 txt = self.name
-                text = self.font.render(txt, 1, Colors.TEXT)
+                text = self.font.render(txt, 1, SETTINGS["color"]["text"])
                 counting = 0
                 while mouse[0] < pos[0] + text.get_width():
                     if len(self.name) < counting:
                         break
                     txt = txt[:-1]
                     counting += 1
-                    text = self.font.render(txt, 1, Colors.TEXT)
+                    text = self.font.render(txt, 1, SETTINGS["color"]["text"])
                 self.type_location = len(txt)
 
         #drawing the cursor
         if self == selected_field and time % 60 < 30:
-            token = self.font.render("|", 1, Colors.TEXT)
-            surface.blit(token, (pos[0] + self.font.render(self.name[0:self.type_location], 1, Colors.TEXT).get_width(), pos[1]))
+            token = self.font.render("|", 1, SETTINGS["color"]["text"])
+            surface.blit(token, (pos[0] + self.font.render(self.name[0:self.type_location], 1, SETTINGS["color"]["text"]).get_width(), pos[1]))
 
         #readding the offset to the y possition
         if not self.permanent:
@@ -155,7 +153,7 @@ class buttons:
 
         #writing the text underneath the mouse
         '''if self.rect.collidepoint(mouse):
-            text = self.font.render(f"{self.name}, x:{self.rect.x}, y:{self.rect.y}", 1, Colors.TEXT)
+            text = self.font.render(f"{self.name}, x:{self.rect.x}, y:{self.rect.y}", 1, SETTINGS["color"]["text"])
             pos = (mouse[0], mouse[1] - offset)
             surface.blit(text, pos)'''
 
@@ -211,7 +209,7 @@ class buttons:
 class field(buttons):
 
     #initializing the field
-    def __init__(self, name, pos, dimensions, type, old_x = None, old_w = None, border = 0, show=True, font = pygame.font.SysFont(Text.FIELDS_FONT, Text.FIELDS_FONT_SIZE)):
+    def __init__(self, name, pos, dimensions, type, old_x = None, old_w = None, border = 0, show=True, font = pygame.font.SysFont(SETTINGS["text"]["font"]["field_font"], SETTINGS["text"]["font"]["field_font_size"])):
 
         #initialize the parent class: buttons
         super().__init__(name, pos, dimensions, "empty action", None, border, font, show, False, type, old_x, old_w)
@@ -228,7 +226,7 @@ class field(buttons):
             #changig the selected field
             selected_field = self
 
-        if Window.LOGS and self.rect.collidepoint(mouse):
+        if SETTINGS["window"]["logs"] and self.rect.collidepoint(mouse):
             print(f"{Fore.BLUE}field = (\n[type] {self.type}\n[name] {self.name}\n[rect] {self.rect}\n[old] ({self.old_x},{self.old_w})\n){Style.RESET_ALL}")
 
         return selected_field

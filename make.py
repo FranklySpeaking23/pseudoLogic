@@ -1,9 +1,10 @@
 #importing needed files
 from design import field
-from Settings import Window, Text
 import pygame
 from edit import move_down
-from dev import log
+from dev import log, load_settings
+
+SETTINGS = load_settings()
 
 #function for making a new field
 def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
@@ -42,7 +43,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
             for item in FIELDS:
                 if max_height > item.rect.y > hoogte and breedte + selected_field.rect.width > item.rect.x > breedte:
                     hoogte = item.rect.y
-            hoogte += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+            hoogte += SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]
 
             #setting a start possition and type for new fields
             start_pos = (breedte, hoogte)
@@ -57,7 +58,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
                 if main.type == "while":
                     pass_type = FIELDS[FIELDS.index(main) + 1].type
                 elif main.type == "if":
-                    if start_pos[0] > main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT + 3:
+                    if start_pos[0] > main.rect.x + SETTINGS["field"]["margin_if_left"] + 3:
                         pass_type = FIELDS[FIELDS.index(main) + 4].type
                     else:
                         pass_type = FIELDS[FIELDS.index(main) + 3].type
@@ -65,7 +66,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         else:
 
             #setting a start possition and type for new fields
-            start_pos = (selected_field.rect.topleft[0], selected_field.rect.topleft[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+            start_pos = (selected_field.rect.topleft[0], selected_field.rect.topleft[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"])
         
             if type == "default":
                 pass_type = selected_field.type
@@ -78,7 +79,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
         #changing the start position if the field needs to be above the selected field
         if shift:
-            start_pos = (start_pos[0], start_pos[1] - Window.FIELD_HEIGHT - Window.MARGIN_HEIGHT)
+            start_pos = (start_pos[0], start_pos[1] - SETTINGS["field"]["height"] - SETTINGS["field"]["margin_height"])
 
     #if an error appears (e.g. there is no selected field)
     except AttributeError:
@@ -86,12 +87,12 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
         #setting the new field height
         hoogte = 10
         for veld in FIELDS:
-            if veld.rect.y + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT > hoogte:
-                hoogte = veld.rect.y + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+            if veld.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] > hoogte:
+                hoogte = veld.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]
 
         #setting a start possition and dimensions for the new fields
         start_pos = (10, hoogte)
-        dimensions = (FIELD_WIDTH, Window.FIELD_HEIGHT)
+        dimensions = (FIELD_WIDTH, SETTINGS["field"]["height"])
 
         old_x = 10
         old_w = FIELD_WIDTH
@@ -109,7 +110,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
             if main.type == "while":
                 pass_type = FIELDS[FIELDS.index(main) + 1].type
             elif main.type == "if":
-                if start_pos[0] > main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT + 3:
+                if start_pos[0] > main.rect.x + SETTINGS["field"]["margin_if_left"] + 3:
                     pass_type = FIELDS[FIELDS.index(main) + 4].type
                 else:
                     pass_type = FIELDS[FIELDS.index(main) + 3].type
@@ -117,27 +118,27 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
     #making the new field(s) based on the type of the field(s)
     if type == "default":
-        FIELDS.append(field(Text.DEFAULT_TEXT, start_pos, (dimensions[0], Window.FIELD_HEIGHT), pass_type, old_x, old_w))
+        FIELDS.append(field(SETTINGS["text"]["field"]["default"], start_pos, (dimensions[0], SETTINGS["field"]["height"]), pass_type, old_x, old_w))
         amount_added = 1
         height_added = 1
     elif type == "if":
-        FIELDS.append(field(Text.IF_STATEMENT_TEXT, start_pos, (dimensions[0], Window.FIELD_HEIGHT), pass_type, old_x, old_w)),
-        FIELDS.append(field(Text.IF_STATEMENT_LEFT, (start_pos[0] + Window.MARGIN_IF_STATEMENT_LEFT, start_pos[1] + 10), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT - 10), "if-dan", old_x + Window.MARGIN_IF_STATEMENT_LEFT, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
-        FIELDS.append(field(Text.IF_STATEMENT_RIGHT, (start_pos[0] + dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, start_pos[1] + 5), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT - 5), "if-anders", old_x + dimensions[0] // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
-        FIELDS.append(field(Text.IF_STATEMENT_B_LEFT, (start_pos[0] + Window.MARGIN_IF_STATEMENT_LEFT, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT), "if-sec-T", old_x + Window.MARGIN_IF_STATEMENT_LEFT, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
-        FIELDS.append(field(Text.IF_STATEMENT_B_RIGHT, (start_pos[0] + dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2, Window.FIELD_HEIGHT), "if-sec-F", old_x + dimensions[0] // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE, old_w // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2))
+        FIELDS.append(field(SETTINGS["text"]["field"]["if"], start_pos, (dimensions[0], SETTINGS["field"]["height"]), pass_type, old_x, old_w)),
+        FIELDS.append(field(SETTINGS["text"]["field"]["if_than"], (start_pos[0] + SETTINGS["field"]["margin_if_left"], start_pos[1] + 10), (dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2, SETTINGS["field"]["height"] - 10), "if-dan", old_x + SETTINGS["field"]["margin_if_left"], old_w // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2))
+        FIELDS.append(field(SETTINGS["text"]["field"]["if_else"], (start_pos[0] + dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"], start_pos[1] + 5), (dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2, SETTINGS["field"]["height"] - 5), "if-anders", old_x + dimensions[0] // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"], old_w // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2))
+        FIELDS.append(field(SETTINGS["text"]["field"]["sub_if_than"], (start_pos[0] + SETTINGS["field"]["margin_if_left"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2, SETTINGS["field"]["height"]), "if-sec-T", old_x + SETTINGS["field"]["margin_if_left"], old_w // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2))
+        FIELDS.append(field(SETTINGS["text"]["field"]["sub_if_else"], (start_pos[0] + dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2, SETTINGS["field"]["height"]), "if-sec-F", old_x + dimensions[0] // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"], old_w // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2))
         amount_added = 5
         height_added = 2
     elif type == "while":
-        FIELDS.append(field(Text.WHILE_STATEMENT_TEXT, start_pos, (dimensions[0], Window.FIELD_HEIGHT), type, old_x, old_w)),
-        FIELDS.append(field(Text.WHILE_STATEMENT_LOWER_TEXT, (start_pos[0] + Window.MARGIN_WHILE_STATEMENT, start_pos[1] + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT), (dimensions[0] - Window.MARGIN_WHILE_STATEMENT, Window.FIELD_HEIGHT), "while-sec", old_x + Window.MARGIN_WHILE_STATEMENT, old_w - Window.MARGIN_WHILE_STATEMENT))
+        FIELDS.append(field(SETTINGS["text"]["field"]["while"], start_pos, (dimensions[0], SETTINGS["field"]["height"]), type, old_x, old_w)),
+        FIELDS.append(field(SETTINGS["text"]["field"]["sub_while"], (start_pos[0] + SETTINGS["field"]["margin_while"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] - SETTINGS["field"]["margin_while"], SETTINGS["field"]["height"]), "while-sec", old_x + SETTINGS["field"]["margin_while"], old_w - SETTINGS["field"]["margin_while"]))
         
         amount_added = 2
         height_added = 2
 
     '''elif type == "function":
-        FIELDS.append(field(theme.FUNCTION_TEXT, start_pos, (dimensions[0], theme.FIELD_HEIGHT), type, 0, True, pygame.font.SysFont(theme.FIELDS_FONT, theme.FUNCTION_FONT_SIZE)))
-        FIELDS.append(field(theme.FUNCTION_LOWER_TEXT, (start_pos[0] + 15, start_pos[0] + theme.FIELD_HEIGHT + theme.MARGIN_HEIGHT), (dimensions[0] - 30, dimensions[1]), "function-sec"))'''
+        FIELDS.append(field(theme.FUNCTION_TEXT, start_pos, (dimensions[0], theme["height"]), type, 0, True, pygame.font.SysFont(theme.FIELDS_FONT, theme.FUNCTION_FONT_SIZE)))
+        FIELDS.append(field(theme.FUNCTION_LOWER_TEXT, (start_pos[0] + 15, start_pos[0] + theme["height"] + theme["margin_height"]), (dimensions[0] - 30, dimensions[1]), "function-sec"))'''
 
 
     #moving the other fields
@@ -157,11 +158,11 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
                     if item.rect.colliderect(r.rect) and r != item and (not item.type in ["if-dan", "if-anders"]):
                         if (item.type == "if" and (not r.type in ["if-dan", "if-anders"])) or item.type != "if":
                             if item.type == "if":
-                                FIELDS[FIELDS.index(item) + 1].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
-                                FIELDS[FIELDS.index(item) + 2].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                                FIELDS[FIELDS.index(item) + 1].rect.y += SETTINGS["field"]["height"] + Window["margin_height"]
+                                FIELDS[FIELDS.index(item) + 2].rect.y += Window["height"] + Window["margin_height"]
 
                             print(item.rect, ":", r.rect)
-                            item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                            item.rect.y += Window["height"] + Window["margin_height"]
                             break'''
 
 
@@ -177,7 +178,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
 
                 #checking the width and changing the height
                 if (start_pos[0] + dimensions[0] >= item.rect.x >= start_pos[0] or item.rect.x < start_pos[0] < item.rect.x + item.rect.width) and (item != selected_field or shift):
-                    item.rect.y += (Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT) * height_added
+                    item.rect.y += (Window["height"] + Window["margin_height"]) * height_added
                     print(item.name, ":", item.type, ":", item.rect)
                 print("_____________________")
                 

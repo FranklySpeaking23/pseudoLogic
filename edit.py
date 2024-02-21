@@ -1,9 +1,10 @@
 #importing files
-from dev import log
+from dev import log, load_settings
 import pygame
 from saveload import load_json, save_json
-from Settings import Window
 from json import loads
+
+SETTINGS = load_settings()
 
 #function to restore program using a backup
 def load_backup(FIELDS, BACKUPS, WIDTH):
@@ -111,7 +112,7 @@ def delete_field(selected_field, FIELDS):
     for k in range(removed):
         for i, field in enumerate(fields):
             if field.rect.y > 20 and (not field.type in ["if-dan", "if-anders"]): 
-                new_height = field.rect.y - Window.MARGIN_HEIGHT - Window.FIELD_HEIGHT
+                new_height = field.rect.y - SETTINGS["field"]["margin_height"] - SETTINGS["field"]["height"]
                 for j in range(i):
                     item = fields[j]
                     if item.rect.collidepoint((field.rect.x, new_height)) or item.rect.collidepoint((field.rect.x, new_height + 10)):
@@ -121,7 +122,7 @@ def delete_field(selected_field, FIELDS):
                     checking = []
                     for j in range(i):
                         item = fields[j]
-                        if item.rect.y + Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT >= field.rect.y:
+                        if item.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] >= field.rect.y:
                             checking.append(item)
                     for item in checking:
                         if field.rect.x < item.rect.x < field.rect.x + field.rect.width:
@@ -182,10 +183,10 @@ def move_down(amount_added, height_added, FIELDS):
                     if item.rect.colliderect(r.rect) and r != item and (not item.type in ["if-dan", "if-anders"]):
                         if (item.type == "if" and (not r.type in ["if-dan", "if-anders"])) or item.type != "if":
                             if item.type == "if":
-                                FIELDS[FIELDS.index(item) + 1].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
-                                FIELDS[FIELDS.index(item) + 2].rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                                FIELDS[FIELDS.index(item) + 1].rect.y += SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]
+                                FIELDS[FIELDS.index(item) + 2].rect.y += SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]
 
-                            item.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                            item.rect.y += SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]
                             break
     log("Moving down", "func-e")
 
@@ -224,7 +225,7 @@ def paste(FIELDS, selected_field, copy, WIDTH):
             field.rect.y -= temp
             field.rect.y += selected_field.rect.y
             if not shift:
-                field.rect.y += Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT
+                field.rect.y += SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]
         
         '''for field in fields:
             field.old_w = field.rect.width / (WIDTH / Window.WIDTH)

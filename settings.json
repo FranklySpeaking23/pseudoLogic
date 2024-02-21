@@ -1,0 +1,151 @@
+{
+    "color": {
+        "field": [
+            20,
+            100,
+            30
+        ],
+        "if": [
+            30,
+            80,
+            40
+        ],
+        "if_than": [
+            30,
+            80,
+            40
+        ],
+        "if_else": [
+            30,
+            80,
+            40
+        ],
+        "if_than_line": [
+            10,
+            50,
+            30
+        ],
+        "if_else_line": [
+            10,
+            50,
+            30
+        ],
+        "sub_if_than": [
+            30,
+            80,
+            40
+        ],
+        "sub_if_else": [
+            30,
+            80,
+            40
+        ],
+        "while": [
+            40,
+            60,
+            50
+        ],
+        "sub_while": [
+            40,
+            60,
+            50
+        ],
+        "hover": [
+            125,
+            150,
+            200
+        ],
+        "selected": [
+            100,
+            100,
+            100
+        ],
+        "text": [
+            255,
+            255,
+            255
+        ],
+        "background": [
+            10,
+            40,
+            10
+        ],
+        "patern": [
+            255,
+            255,
+            255
+        ]
+    },
+    "patern": {
+        "patern": "fancy_lines"
+    },
+    "saveload": {
+        "save_name": "pseudoLogic_save_file",
+        "save_name_image": "pseudoLogic_save_image",
+        "save_dir_file": "",
+        "save_dir_image": "",
+        "load_name": "",
+        "load_dir": ""
+    },
+    "text": {
+        "font": {
+            "button_font": "Verdana",
+            "button_font_size": 20,
+            "field_font": "Verdana",
+            "field_font_size": 12
+        },
+        "field": {
+            "if": "Als ",
+            "if_than": "T",
+            "if_else": "F",
+            "sub_if_than": "",
+            "sub_if_else": "",
+            "while": "terwijl ",
+            "sub_while": "",
+            "default": ""
+        },
+        "button": {
+            "save_image": "",
+            "save_json": "",
+            "load_json": "",
+            "default": "D",
+            "if": "I",
+            "while": "W",
+            "delete": "",
+            "back": "",
+            "copy": "",
+            "paste": ""
+        }
+    },
+    "window": {
+        "width": 900,
+        "height": 500,
+        "fps": 60,
+        "title": "pseudoLogic",
+        "change_y_pos": 15,
+        "logs": false
+    },
+    "field": {
+        "height": 50,
+        "margin_height": 15,
+        "margin_while": 30,
+        "sidebar_while": true,
+        "width_sidebar_while": 15,
+        "sidebar_if": false,
+        "width_sidebar_if": 15,
+        "margin_if_left": 30,
+        "margin_if_middle": 10,
+        "width_if_line": 5,
+        "border": 0,
+        "rounding": 5
+    },
+    "image": {
+        "back": "Images/back.png",
+        "copy": "Images/copy.png",
+        "paste": "Images/paste.png",
+        "save_json": "Images/save_json.png",
+        "save_image": "Images/save_as_image.png",
+        "load_json": "Images/open.png",
+        "delete": "Images/delete.png"
+    }
+}

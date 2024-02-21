@@ -1,11 +1,12 @@
 #importing files
 import pygame
 from design import buttons
-from Settings import Text, Window
 import make
 import saveload
 import edit
-from dev import log
+from dev import log, load_settings
+
+SETTINGS = load_settings()
 
 #function to check if the size of the window changed and take the needed actions
 def window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS):
@@ -43,17 +44,17 @@ def update_button_possitions(BUTTON, WIDTH, HEIGHT):
     BUTTON = []
 
     #make all the buttons
-    BUTTON.append(buttons(Text.FIELD_DEFAULT, (WIDTH - 50, 10), (40, 40), make.new_field, "default"))
-    BUTTON.append(buttons(Text.FIELD_IF_STATEMENT, (WIDTH - 50, 60), (40, 40), make.new_field, "if"))
-    BUTTON.append(buttons(Text.FIELD_WHILE_STATEMENT, (WIDTH - 50, 110), (40, 40), make.new_field, "while"))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["default"], (WIDTH - 50, 10), (40, 40), make.new_field, "default"))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["if"], (WIDTH - 50, 60), (40, 40), make.new_field, "if"))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["while"], (WIDTH - 50, 110), (40, 40), make.new_field, "while"))
     #BUTTON.append(buttons(theme.FIELD_FUNCTION, (WIDTH - 50, 160), (40, 40), make.new_field, "function"))
-    BUTTON.append(buttons(Text.SAVE_AS_JSON, (WIDTH - 50, HEIGHT - 50), (40, 40), saveload.save_json, None, image="Images/save_json.png"))
-    BUTTON.append(buttons(Text.SAVE_AS_IMAGE, (WIDTH - 50, HEIGHT - 100), (40, 40), saveload.save_image, None, image="Images/save_as_image.png"))
-    BUTTON.append(buttons(Text.LOAD_JSON, (WIDTH - 50, HEIGHT - 150), (40, 40), saveload.load_json, None, image="Images/open.png"))
-    BUTTON.append(buttons(Text.FIELD_DELETE, (60, HEIGHT - 50), (40, 40), edit.delete_field, None, image="Images/delete.png"))
-    BUTTON.append(buttons(Text.BACK, (10, HEIGHT - 50), (40, 40), edit.load_backup, None, image="Images/back.png"))
-    BUTTON.append(buttons(Text.COPY, (110, HEIGHT - 50), (40, 40), edit.copy, None, image="Images/copy.png"))
-    BUTTON.append(buttons(Text.PASTE, (160, HEIGHT - 50), (40, 40), edit.paste, None, image="Images/paste.png"))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["save_json"], (WIDTH - 50, HEIGHT - 50), (40, 40), saveload.save_json, None, image=SETTINGS["image"]["save_json"]))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["save_image"], (WIDTH - 50, HEIGHT - 100), (40, 40), saveload.save_image, None, image=SETTINGS["image"]["save_image"]))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["load_json"], (WIDTH - 50, HEIGHT - 150), (40, 40), saveload.load_json, None, image=SETTINGS["image"]["load_json"]))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["delete"], (60, HEIGHT - 50), (40, 40), edit.delete_field, None, image=SETTINGS["image"]["delete"]))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["back"], (10, HEIGHT - 50), (40, 40), edit.load_backup, None, image=SETTINGS["image"]["back"]))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["copy"], (110, HEIGHT - 50), (40, 40), edit.copy, None, image=SETTINGS["image"]["copy"]))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["paste"], (160, HEIGHT - 50), (40, 40), edit.paste, None, image=SETTINGS["image"]["paste"]))
 
     log("Updating buttons", "func-e")
     return BUTTON
@@ -114,21 +115,21 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
 
                     #I know that there are to much if statements here, but I'm lazy so won't remove them
                     if field[1].type in ["if-dan", "if-sec-T"]:
-                        field[1].rect.x = main.rect.x + Window.MARGIN_IF_STATEMENT_LEFT
+                        field[1].rect.x = main.rect.x + SETTINGS["field"]["margin_if_left"]
                     if field[1].type in ["if-dan", "if-anders"]:
-                        field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE //2 - Window.MARGIN_IF_STATEMENT_LEFT // 2
+                        field[1].rect.width = main.rect.width // 2 - SETTINGS["field"]["margin_if_middle"] //2 - SETTINGS["field"]["margin_if_left"] // 2
                         print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
                     if field[1].type in ["if-anders"]:
-                        field[1].rect.x = main.rect.x + main.rect.width - field[1].rect.width# + (main.rect.width - Window.MARGIN_IF_STATEMENT_LEFT - Window.MARGIN_IF_STATEMENT_MIDDLE) // 2 + Window.MARGIN_IF_STATEMENT_LEFT + Window.MARGIN_IF_STATEMENT_MIDDLE
+                        field[1].rect.x = main.rect.x + main.rect.width - field[1].rect.width# + (main.rect.width - SETTINGS["field"]["margin_if_left"] - SETTINGS["field"]["margin_if_middle"]) // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"]
                     if field[1].type in ["if-sec-T", "if-sec-F"]:
-                        field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2
+                        field[1].rect.width = main.rect.width // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2
                     if field[1].type in ["if-sec-F"]:
                         pre = FIELDS[FIELDS.index(field[1]) - 1]
-                        field[1].rect.x = pre.rect.x + pre.rect.width + Window.MARGIN_IF_STATEMENT_MIDDLE
+                        field[1].rect.x = pre.rect.x + pre.rect.width + SETTINGS["field"]["margin_if_middle"]
                 #changing the inner part of a while statement based on the possition of it's parrent
                 if field[1].type == "while-sec":
                     main = FIELDS[FIELDS.index(field[1]) - 1]
-                    field[1].rect.x = main.rect.x + Window.MARGIN_WHILE_STATEMENT
+                    field[1].rect.x = main.rect.x + SETTINGS["field"]["margin_while"]
 
                 #adding the old x pos to the old_x dictionary for the following fields
                 old_x[field[1].old_x] = field[1].rect.x
@@ -140,14 +141,14 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                                 main = FIELDS[FIELDS.index(field[1]) - 1]
                             elif field[1].type == "if-anders":
                                 main = FIELDS[FIELDS.index(field[1]) - 2]
-                            field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE //2 - Window.MARGIN_IF_STATEMENT_LEFT // 2
+                            field[1].rect.width = main.rect.width // 2 - SETTINGS["field"]["margin_if_middle"] //2 - SETTINGS["field"]["margin_if_left"] // 2
                             print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
                 if field[1].type in ["if-sec-T", "if-sec-F"]:
                             if field[1].type == "if-sec-T":
                                 main = FIELDS[FIELDS.index(field[1]) - 3]
                             elif field[1].type == "if-sec-F":
                                 main = FIELDS[FIELDS.index(field[1]) - 4]
-                            field[1].rect.width = main.rect.width // 2 - Window.MARGIN_IF_STATEMENT_LEFT // 2 - Window.MARGIN_IF_STATEMENT_MIDDLE // 2
+                            field[1].rect.width = main.rect.width // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2
             except:
                  pass
             if field[1].type == "if-anders":

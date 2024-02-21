@@ -1,17 +1,18 @@
 #importing needed files / libraries
 import pygame
-from Settings import Window
 import update_checker
 import draw
 from resize import window_size, update_button_possitions
 import edit
-from dev import log
+from dev import log, load_settings
+
+SETTINGS = load_settings()
 
 #initializing the window
-WIDTH, HEIGHT = Window.WIDTH, Window.HEIGHT
+WIDTH, HEIGHT = SETTINGS["window"]["width"], SETTINGS["window"]["height"]
 WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-pygame.display.set_caption(Window.TITLE)
-FPS = Window.FPS
+pygame.display.set_caption(SETTINGS["window"]["title"])
+FPS = SETTINGS["window"]["fps"]
 pygame.font.init()
 
 #making variables
@@ -21,7 +22,7 @@ FIELD_WIDTH = WIDTH - 70
 
 
 
-def main():
+def main(surface):
 
     #setting variables
     global selected_field, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS, COPY
@@ -43,7 +44,7 @@ def main():
 
         #checking if the window width changed (once every second)
         if active_time % FPS == 0:
-            WIDTH, HEIGHT, FIELD_WIDTH, BUTTON = window_size(WIN, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS)
+            WIDTH, HEIGHT, FIELD_WIDTH, BUTTON = window_size(surface, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS)
 
         #setting the mouse possition (relative to window and offset)
         mouse = pygame.mouse.get_pos()
@@ -81,14 +82,14 @@ def main():
 
             #changing vertical offset
             if event.type == pygame.MOUSEWHEEL:
-                offset -= event.y * Window.CHANGE_Y_POS
+                offset -= event.y * SETTINGS["window"]["change_y_pos"]
             
         #shorten the lenght of the backups
         if len(BACKUPS) > 10:
             BACKUPS.pop(0)
 
         #update the display
-        draw.display(WIN, mouse, offset, active_time, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT)
+        draw.display(surface, mouse, offset, active_time, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT)
 
     #quit the program
     pygame.quit()
@@ -97,5 +98,5 @@ def main():
 #run the program
 if __name__ == "__main__":
     log("Program started", "log")
-    main()
+    main(WIN)
     log("Program finished", "log")

@@ -1,11 +1,12 @@
 #importing files
 import resize
-from Settings import SaveAndLoad, Window
 import pygame
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import draw
 from json import dump, load
-from dev import log
+from dev import log, load_settings
+
+SETTINGS = load_settings()
 
 #function to save the diagram as an image (.png)
 def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
@@ -15,7 +16,7 @@ def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
     for item in FIELDS:
         if item.rect.y > hoogte:
             hoogte = item.rect.y
-    hoogte += Window.FIELD_HEIGHT + 10
+    hoogte += SETTINGS["field"]["height"] + 10
 
     #making a surface
     surface = pygame.Surface((WIDTH - 50, hoogte))
@@ -24,7 +25,7 @@ def save_image(FIELDS, WIDTH, selected_field, BUTTON, HEIGHT):
     draw.display(surface, (-10, -10), 0, 59, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT)
     
     #asking for a file name and location
-    name = asksaveasfilename(initialfile=SaveAndLoad.SAVE_NAME_IMAGE, initialdir=SaveAndLoad.SAVE_DIR_IMAGE)
+    name = asksaveasfilename(initialfile=SETTINGS["saveload"]["save_name_image"], initialdir=SETTINGS["saveload"]["save_dir_image"])
 
     #saving the image
     if name != "":
@@ -47,7 +48,7 @@ def save_json(FIELDS, WIDTH, popup=True):
     if popup:
 
         #get a filename from the user
-        name = asksaveasfilename(initialfile=SaveAndLoad.SAVE_NAME_FILE, initialdir=SaveAndLoad.SAVE_DIR_FILE)
+        name = asksaveasfilename(initialfile=SETTINGS["saveload"]["save_name"], initialdir=SETTINGS["saveload"]["save_dir_file"])
         if name != "":
 
             #dumping the save_fields list in the file as json information
@@ -66,7 +67,7 @@ def load_json(FIELDS, WIDTH, popup=True, change=True):
 
     #if you are loading a file (not a backup), get the file name
     if popup:
-        file_selected = askopenfilename(filetypes=[("json", ".json")], initialfile=SaveAndLoad.LOAD_NAME_FILE, initialdir=SaveAndLoad.LOAD_DIR_FILE)
+        file_selected = askopenfilename(filetypes=[("json", ".json")], initialfile=SETTINGS["saveload"]["load_name"], initialdir=SETTINGS["saveload"]["load_dir"])
     else:
         file_selected = FIELDS
     try:

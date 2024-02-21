@@ -1,6 +1,8 @@
 #importing needed files
-from Settings import Colors, Window, Patern
 import pygame
+from dev import load_settings
+
+SETTINGS = load_settings()
 
 #function to draw the side lines of a while-statement
 def side_lines(surface, offset, start, FIELDS, WIDTH):
@@ -14,14 +16,14 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
     hoogte = hoogte + 10
 
     for field in FIELDS:
-        if (field.type == "while" and Window.SIDEBAR_WHILE_STATEMENT) or (field.type == "if" and Window.SIDEBAR_IF_STATEMENT):
+        if (field.type == "while" and SETTINGS["field"]["sidebar_while"]) or (field.type == "if" and SETTINGS["field"]["sidebar_if"]):
             if field.type == "if":
-                breedte = Window.WIDTH_SIDEBAR_IF_STATEMENT
-                color = Colors.IF_STATEMENT
+                breedte = SETTINGS["field"]["width_sidebar_if"]
+                color = SETTINGS["color"]["if"]
             else:
-                breedte = Window.WIDTH_SIDEBAR_WHILE_STATEMENT
-                color = Colors.WHILE_STATEMENT
-            rect = pygame.Rect(field.rect.x, field.rect.y, breedte, Window.FIELD_HEIGHT + Window.MARGIN_HEIGHT)
+                breedte = SETTINGS["field"]["width_sidebar_while"]
+                color = SETTINGS["color"]["while"]
+            rect = pygame.Rect(field.rect.x, field.rect.y, breedte, SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"])
             run = True
             while run and rect.y < hoogte:
                 cont = True
@@ -32,8 +34,8 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
                         break
                 if not cont:
                     continue
-                pygame.draw.rect(surface, color, pygame.Rect(rect.x, rect.y - offset, rect.width, rect.height + 5), Window.BORDER, Window.ROUNDING)
-                rect.y += Window.MARGIN_HEIGHT + Window.FIELD_HEIGHT
+                pygame.draw.rect(surface, color, pygame.Rect(rect.x, rect.y - offset, rect.width, rect.height + 5), SETTINGS["field"]["border"], SETTINGS["field"]["rounding"])
+                rect.y += SETTINGS["field"]["margin_height"] + SETTINGS["field"]["height"]
 
     '''#iterating through the width of the screen
     for breedte in range(start, WIDTH - 50, Window.WIDTH_SIDEBAR_WHILE_STATEMENT):
@@ -86,9 +88,9 @@ def side_lines(surface, offset, start, FIELDS, WIDTH):
                     if source != None:
                         #if rect touches while-statement
                         if source.type == "while":
-                            color = Colors.WHILE_STATEMENT
+                            color = SETTINGS["color"]WHILE_STATEMENT
                         else:
-                            color = Colors.IF_STATEMENT
+                            color = SETTINGS["color"]IF_STATEMENT
 
                         #align rect with field and draw to screen
                         rect = pygame.Rect(source.rect.x, source.rect.y - offset, rect.width, rect.height)
@@ -101,13 +103,13 @@ def lines(surface, sort, WIDTH, HEIGHT):
     #checking what type of lines to draw and drawing them to the screen
     if sort == "fancy_lines":
         for i in range(0, WIDTH, 10):
-            pygame.draw.line(surface, Patern.BACKGROUND_LINE_COLOR, (i, HEIGHT - i), (WIDTH - i, i))
+            pygame.draw.line(surface, SETTINGS["color"]["patern"], (i, HEIGHT - i), (WIDTH - i, i))
     elif sort == "triangle_lines":
         for i in range(0, WIDTH, 10):
-            pygame.draw.line(surface, Patern.BACKGROUND_LINE_COLOR, (i, HEIGHT), (WIDTH - i, 0))
+            pygame.draw.line(surface, SETTINGS["color"]["patern"], (i, HEIGHT), (WIDTH - i, 0))
     elif sort == "diagonal_lines":
         for i in range(0, WIDTH*2, 10):
-            pygame.draw.line(surface, Patern.BACKGROUND_LINE_COLOR, (-1 * WIDTH + i, HEIGHT), (i, 0))
+            pygame.draw.line(surface, SETTINGS["color"]["patern"], (-1 * WIDTH + i, HEIGHT), (i, 0))
     elif sort == "no_lines":
         pass
 
@@ -118,11 +120,11 @@ def display(finale_surface, mouse, offset, time, FIELDS, selected_field, BUTTON,
     surface = pygame.Surface((finale_surface.get_width(), finale_surface.get_height()))
     
     #making the background
-    surface.fill(Colors.BACKGROUND)
-    lines(surface, Patern.BACKGROUND_PATERN, WIDTH, HEIGHT)
+    surface.fill(SETTINGS["color"]["background"])
+    lines(surface, SETTINGS["patern"]["patern"], WIDTH, HEIGHT)
 
     #drawing the side lines (before the fields --> if an error appears, the fields are still on top)
-    side_lines(surface, offset, 10 - Window.WIDTH_SIDEBAR_WHILE_STATEMENT, FIELDS, WIDTH)
+    side_lines(surface, offset, 10 - SETTINGS["field"]["width_sidebar_while"], FIELDS, WIDTH)
     
     #drawing the fields and buttons
     for item in FIELDS:
