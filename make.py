@@ -4,12 +4,16 @@ import pygame
 from edit import move_down
 from dev import log, load_settings
 
-SETTINGS = load_settings()
+INSTELLINGEN = load_settings()
 
 #function for making a new field
-def new_field(type, FIELDS, selected_field, FIELD_WIDTH):
+def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None):
     log("Making fields", "func-s")
     #making some variables
+    if settings != None:
+        SETTINGS = settings
+    else:
+        SETTINGS = INSTELLINGEN
     amount_added = 0
     height_added = 0
     old_x = 0

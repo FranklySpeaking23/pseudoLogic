@@ -1,5 +1,4 @@
 #importing files
-import resize
 import pygame
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import draw
@@ -64,6 +63,7 @@ def load_json(FIELDS, WIDTH, popup=True, change=True):
 
     #import needs to be here because design imports the saveload.save_json() function
     from design import field
+    import resize
 
     #if you are loading a file (not a backup), get the file name
     if popup:
