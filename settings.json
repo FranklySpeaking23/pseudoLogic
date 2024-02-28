@@ -123,7 +123,7 @@
         "fps": 60,
         "title": "pseudoLogic",
         "change_y_pos": 15,
-        "logs": false
+        "logs": true
     },
     "field": {
         "height": 50,

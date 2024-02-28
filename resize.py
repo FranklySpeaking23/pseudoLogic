@@ -101,7 +101,7 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                 #trying to load the x pos from already changed fields with the same x pos
                 off = old_x[field[1].old_x]
                 field[1].rect.x = off
-                print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
+
 
             #if the x possition hasn't been used already
             except:
@@ -118,7 +118,6 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                         field[1].rect.x = main.rect.x + SETTINGS["field"]["margin_if_left"]
                     if field[1].type in ["if-dan", "if-anders"]:
                         field[1].rect.width = main.rect.width // 2 - SETTINGS["field"]["margin_if_middle"] //2 - SETTINGS["field"]["margin_if_left"] // 2
-                        print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
                     if field[1].type in ["if-anders"]:
                         field[1].rect.x = main.rect.x + main.rect.width - field[1].rect.width# + (main.rect.width - SETTINGS["field"]["margin_if_left"] - SETTINGS["field"]["margin_if_middle"]) // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"]
                     if field[1].type in ["if-sec-T", "if-sec-F"]:
@@ -142,7 +141,6 @@ def change_field_width(new_field_width, FIELDS, WIDTH):
                             elif field[1].type == "if-anders":
                                 main = FIELDS[FIELDS.index(field[1]) - 2]
                             field[1].rect.width = main.rect.width // 2 - SETTINGS["field"]["margin_if_middle"] //2 - SETTINGS["field"]["margin_if_left"] // 2
-                            print(f"{field[1].type}:{field[1].name}:{field[1].rect}")
                 if field[1].type in ["if-sec-T", "if-sec-F"]:
                             if field[1].type == "if-sec-T":
                                 main = FIELDS[FIELDS.index(field[1]) - 3]

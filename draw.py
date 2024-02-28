@@ -128,7 +128,8 @@ def display(finale_surface, mouse, offset, time, FIELDS, selected_field, BUTTON,
     
     #drawing the fields and buttons
     for item in FIELDS:
-        item.draw(surface, mouse, offset, time, selected_field)
+        if item.show:
+            item.draw(surface, mouse, offset, time, selected_field)
     for item in FIELDS:
         if item.type == "if":
             item.draw(surface, mouse, offset, time, selected_field)

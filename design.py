@@ -225,6 +225,7 @@ class field(buttons):
 
             #changig the selected field
             selected_field = self
+            self.show = True
 
         if SETTINGS["window"]["logs"] and self.rect.collidepoint(mouse):
             print(f"{Fore.BLUE}field = (\n[type] {self.type}\n[name] {self.name}\n[rect] {self.rect}\n[old] ({self.old_x},{self.old_w})\n){Style.RESET_ALL}")

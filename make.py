@@ -7,7 +7,7 @@ from dev import log, load_settings
 INSTELLINGEN = load_settings()
 
 #function for making a new field
-def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None):
+def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None, shift=None):
     log("Making fields", "func-s")
     #making some variables
     if settings != None:
@@ -18,7 +18,8 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None):
     height_added = 0
     old_x = 0
     old_w = 0
-    shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
+    if shift == None:
+        shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
 
     try:
         #setting a dimension for new fields
@@ -119,7 +120,6 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None):
                 else:
                     pass_type = FIELDS[FIELDS.index(main) + 3].type
 
-
     #making the new field(s) based on the type of the field(s)
     if type == "default":
         FIELDS.append(field(SETTINGS["text"]["field"]["default"], start_pos, (dimensions[0], SETTINGS["field"]["height"]), pass_type, old_x, old_w))
@@ -136,9 +136,16 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None):
     elif type == "while":
         FIELDS.append(field(SETTINGS["text"]["field"]["while"], start_pos, (dimensions[0], SETTINGS["field"]["height"]), type, old_x, old_w)),
         FIELDS.append(field(SETTINGS["text"]["field"]["sub_while"], (start_pos[0] + SETTINGS["field"]["margin_while"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] - SETTINGS["field"]["margin_while"], SETTINGS["field"]["height"]), "while-sec", old_x + SETTINGS["field"]["margin_while"], old_w - SETTINGS["field"]["margin_while"]))
-        
+
         amount_added = 2
         height_added = 2
+
+    elif type == "if-sec-T":
+        FIELDS.append(field(SETTINGS["text"]["field"]["sub_if_than"], (start_pos[0] + SETTINGS["field"]["margin_if_left"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2, SETTINGS["field"]["height"]), "if-sec-T", old_x + SETTINGS["field"]["margin_if_left"], old_w // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2))
+    elif type == "if-sec-F":
+        FIELDS.append(field(SETTINGS["text"]["field"]["sub_if_else"], (start_pos[0] + dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2, SETTINGS["field"]["height"]), "if-sec-F", old_x + dimensions[0] // 2 + SETTINGS["field"]["margin_if_left"] + SETTINGS["field"]["margin_if_middle"], old_w // 2 - SETTINGS["field"]["margin_if_left"] // 2 - SETTINGS["field"]["margin_if_middle"] // 2))
+    elif type == "while-sec":
+        FIELDS.append(field(SETTINGS["text"]["field"]["sub_while"], (start_pos[0] + SETTINGS["field"]["margin_while"], start_pos[1] + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"]), (dimensions[0] - SETTINGS["field"]["margin_while"], SETTINGS["field"]["height"]), "while-sec", old_x + SETTINGS["field"]["margin_while"], old_w - SETTINGS["field"]["margin_while"]))
 
     '''elif type == "function":
         FIELDS.append(field(theme.FUNCTION_TEXT, start_pos, (dimensions[0], theme["height"]), type, 0, True, pygame.font.SysFont(theme.FIELDS_FONT, theme.FUNCTION_FONT_SIZE)))

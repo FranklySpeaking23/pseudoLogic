@@ -97,42 +97,82 @@ def load_backup(FIELDS, BACKUPS, WIDTH):
         elif hoogte < '''
 
 def delete_field(selected_field, FIELDS):
+    from make import new_field
     log("Deleting fields", "func-s")
     fields = []
     fields.extend(FIELDS)
     fields.sort(key=lambda x:x.rect.y)
 
-    removed_items = select_indent(FIELDS, selected_field)
-    for item in removed_items:
-        fields.remove(item)
-        FIELDS.remove(item)
+    con1 = None
+    con2 = None
+    for field in FIELDS:
+        if field.rect.collidepoint((selected_field.rect.x, selected_field.rect.y - SETTINGS["field"]["height"] - SETTINGS["field"]["margin_height"] + 5)) and (field.type == "if" or field.type == "while"):
+            print("if")
+            con1 = "if"
+        print((selected_field.rect.x, selected_field.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] + 3))
+        if field.rect.collidepoint((selected_field.rect.x, selected_field.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] + 3)):
+            print("block")
+            con2 = "block"
+            
+    if (con1==None or con2=="block") or not selected_field.type in ["if-sec-T", "if-sec-F", "while-sec"]:# or (not selected_field.type in ["if-sec-T", "if-sec-F"]):
+        print(1)
+        removed_items = select_indent(FIELDS, selected_field)
+        for item in removed_items:
+            fields.remove(item)
+            FIELDS.remove(item)
 
-    removed = len (removed_items)
+        removed = len (removed_items)
 
-    for k in range(removed):
-        for i, field in enumerate(fields):
-            if field.rect.y > 20 and (not field.type in ["if-dan", "if-anders"]): 
-                new_height = field.rect.y - SETTINGS["field"]["margin_height"] - SETTINGS["field"]["height"]
-                for j in range(i):
-                    item = fields[j]
-                    if item.rect.collidepoint((field.rect.x, new_height)) or item.rect.collidepoint((field.rect.x, new_height + 10)):
-                        if not ((field.type == "if-dan" or field.type == "if-anders") and item.type == "if"):
-                            break
-                else:
-                    checking = []
+        for k in range(removed):
+            for i, field in enumerate(fields):
+                if field.rect.y > 20 and (not field.type in ["if-dan", "if-anders"]): 
+                    new_height = field.rect.y - SETTINGS["field"]["margin_height"] - SETTINGS["field"]["height"]
                     for j in range(i):
                         item = fields[j]
-                        if item.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] >= field.rect.y:
-                            checking.append(item)
-                    for item in checking:
-                        if field.rect.x < item.rect.x < field.rect.x + field.rect.width:
+                        if item.rect.collidepoint((field.rect.x, new_height)) or item.rect.collidepoint((field.rect.x, new_height + 10)):
                             if not ((field.type == "if-dan" or field.type == "if-anders") and item.type == "if"):
                                 break
                     else:
-                        if field.type == "if":
-                            FIELDS[FIELDS.index(field) + 1].rect.y = new_height + 10
-                            FIELDS[FIELDS.index(field) + 2].rect.y = new_height + 5
-                        field.rect.y = new_height
+                        checking = []
+                        for j in range(i):
+                            item = fields[j]
+                            if item.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] >= field.rect.y:
+                                checking.append(item)
+                        for item in checking:
+                            if field.rect.x < item.rect.x < field.rect.x + field.rect.width:
+                                if not ((field.type == "if-dan" or field.type == "if-anders") and item.type == "if"):
+                                    break
+                        else:
+                            if field.type == "if":
+                                FIELDS[FIELDS.index(field) + 1].rect.y = new_height + 10
+                                FIELDS[FIELDS.index(field) + 2].rect.y = new_height + 5
+                            field.rect.y = new_height
+    if not (con1==None or con2=="block") and not selected_field.type in ["if-sec-F", "if-sec-T", "while-sec"]:
+        print(2)
+        selc = None
+        for field in FIELDS:
+            if selected_field.rect.collidepoint((field.rect.x + (selected_field.rect.x - field.rect.x), field.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] + 5)) and field.type == "if":
+                if field.rect.x + field.rect.width//2 - SETTINGS["field"]["margin_if_left"]//2 - SETTINGS["field"]["margin_if_middle"]//2 > selected_field.rect.x:
+                    typ = "if-sec-T"
+                else:
+                    typ = "if-sec-F"
+                selc = field
+                print("check")
+                break
+            if selected_field.rect.collidepoint((field.rect.x + (selected_field.rect.x - field.rect.x), field.rect.y + SETTINGS["field"]["height"] + SETTINGS["field"]["margin_height"] + 5)) and field.type == "while":
+                typ = "while-sec"
+                selc = field
+                print("check")
+                break
+        else:
+            typ = "if-sec-F"
+            selc = FIELDS[-1]
+        print(selc.rect)
+        FIELDS, temp = new_field(typ, FIELDS, field, None, shift=True)
+        FIELDS[-1].show = False
+    
+    else:
+        selected_field.show = False
 
     #FIELDS = fields
     selected_field = None
