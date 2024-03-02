@@ -43,7 +43,7 @@ def main(surface):
         active_time += 1
 
         #checking if the window width changed (once every second)
-        if active_time % FPS == 0:
+        if active_time % FPS == 1:
             WIDTH, HEIGHT, FIELD_WIDTH, BUTTON = window_size(surface, WIDTH, HEIGHT, FIELD_WIDTH, BUTTON, FIELDS)
 
         #setting the mouse possition (relative to window and offset)
