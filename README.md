@@ -6,3 +6,6 @@ Note that if you use the program on Windows all the "/" in the settings.json["im
 
 ## reading the code
 Sorry for my bad code and wrong English.
+
+## credits
+Program: FranklySpeaking23 - Icons: Jasper Janse
