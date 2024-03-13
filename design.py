@@ -45,7 +45,7 @@ class buttons:
             self.image = pygame.image.load(image)
 
     #drawing the button
-    def draw(self, surface, mouse, offset, time, selected_field):
+    def draw(self, surface, mouse, offset, time, selected_field, SHIFT):
 
         #setting the color
 
@@ -56,6 +56,9 @@ class buttons:
         #selected button
         elif self == selected_field:
             color = SETTINGS["color"]["selected"]
+
+        elif self.name == SETTINGS["text"]["button"]["shift"] and SHIFT:
+            color = SETTINGS["color"]["shift_selected"]
 
         #based on type
         else:
@@ -158,11 +161,11 @@ class buttons:
             surface.blit(text, pos)'''
 
     #the action of a button
-    def execute(self, mouse, FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY):
+    def execute(self, mouse, FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY, SHIFT):
 
         #check collision of mouse and button
         if self.rect.collidepoint(mouse) and self.show:
-
+            
             #if making a new field
             if self.argument in ["default", "while", "if", "function"]:
 
@@ -173,7 +176,7 @@ class buttons:
                 BACKUPS.append(temp)
 
                 #execute the action
-                FIELDS, selected_field = self.action(self.argument, FIELDS, selected_field, FIELD_WIDTH)
+                FIELDS, selected_field = self.action(self.argument, FIELDS, selected_field, FIELD_WIDTH, shift=SHIFT)
 
             #executing a function with parameter
             elif self.argument != None:
@@ -200,10 +203,12 @@ class buttons:
                     COPY = self.action(FIELDS, selected_field, COPY)
                 elif "paste" in str(self.action):
                     FIELDS = self.action(FIELDS, selected_field, COPY, WIDTH)
+                elif "shift" in str(self.action):
+                    SHIFT = self.action(SHIFT)
                 else:
                     self.action()
 
-        return FIELDS, selected_field, BACKUPS, COPY
+        return FIELDS, selected_field, BACKUPS, COPY, SHIFT
 
 #main class for the fields
 class field(buttons):

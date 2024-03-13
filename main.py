@@ -32,6 +32,7 @@ def main(surface):
 
     BUTTON = update_button_possitions(BUTTON, WIDTH, HEIGHT)
     BACKUPS = []
+    SHIFT = False
     COPY = None
 
     active_time = 0
@@ -63,7 +64,7 @@ def main(surface):
 
                 #checkiing button press
                 for item in BUTTON:
-                    FIELDS, selected_field, BACKUPS, COPY = item.execute((mouse[0], mouse[1] - offset), FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY)
+                    FIELDS, selected_field, BACKUPS, COPY, SHIFT = item.execute((mouse[0], mouse[1] - offset), FIELDS, selected_field, FIELD_WIDTH, WIDTH, HEIGHT, BUTTON, BACKUPS, COPY, SHIFT)
 
                 selected_field = None
 
@@ -89,7 +90,7 @@ def main(surface):
             BACKUPS.pop(0)
 
         #update the display
-        draw.display(surface, mouse, offset, active_time, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT)
+        draw.display(surface, mouse, offset, active_time, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT, SHIFT)
 
     #quit the program
     pygame.quit()

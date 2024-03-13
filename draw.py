@@ -114,7 +114,7 @@ def lines(surface, sort, WIDTH, HEIGHT):
         pass
 
 #function for drawing the screen
-def display(finale_surface, mouse, offset, time, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT):
+def display(finale_surface, mouse, offset, time, FIELDS, selected_field, BUTTON, WIDTH, HEIGHT, SHIFT):
 
     #making a temporary surface
     surface = pygame.Surface((finale_surface.get_width(), finale_surface.get_height()))
@@ -129,13 +129,13 @@ def display(finale_surface, mouse, offset, time, FIELDS, selected_field, BUTTON,
     #drawing the fields and buttons
     for item in FIELDS:
         if item.show:
-            item.draw(surface, mouse, offset, time, selected_field)
+            item.draw(surface, mouse, offset, time, selected_field, SHIFT)
     for item in FIELDS:
         if item.type == "if":
-            item.draw(surface, mouse, offset, time, selected_field)
+            item.draw(surface, mouse, offset, time, selected_field, SHIFT)
 
     for item in BUTTON:
-        item.draw(surface, (mouse[0], mouse[1] - offset), 0, time, selected_field)
+        item.draw(surface, (mouse[0], mouse[1] - offset), 0, time, selected_field, SHIFT)
 
     #moving to the original surface
     finale_surface.blit(surface, (0, 0))

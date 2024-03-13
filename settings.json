@@ -74,6 +74,11 @@
             255,
             255,
             255
+        ],
+        "shift_selected": [
+            255,
+            255,
+            255
         ]
     },
     "patern": {
@@ -114,7 +119,8 @@
             "delete": "",
             "back": "",
             "copy": "",
-            "paste": ""
+            "paste": "",
+            "shift": "S"
         }
     },
     "window": {

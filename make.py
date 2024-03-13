@@ -7,7 +7,7 @@ from dev import log, load_settings
 INSTELLINGEN = load_settings()
 
 #function for making a new field
-def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None, shift=None):
+def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None, shift=False):
     log("Making fields", "func-s")
     #making some variables
     if settings != None:
@@ -18,7 +18,7 @@ def new_field(type, FIELDS, selected_field, FIELD_WIDTH, settings=None, shift=No
     height_added = 0
     old_x = 0
     old_w = 0
-    if shift == None:
+    if shift == False:
         shift = pygame.key.get_pressed()[pygame.K_LSHIFT] or pygame.key.get_pressed()[pygame.K_RSHIFT]
 
     try:
