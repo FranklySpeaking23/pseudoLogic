@@ -120,7 +120,7 @@
             "back": "",
             "copy": "",
             "paste": "",
-            "shift": "S"
+            "shift": ""
         }
     },
     "window": {
@@ -152,6 +152,7 @@
         "save_json": "Images/save_json.png",
         "save_image": "Images/save_as_image.png",
         "load_json": "Images/open.png",
-        "delete": "Images/delete.png"
+        "delete": "Images/delete.png",
+        "shift": "Images/shift.png"
     }
 }

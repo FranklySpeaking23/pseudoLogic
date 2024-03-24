@@ -48,7 +48,7 @@ def update_button_possitions(BUTTON, WIDTH, HEIGHT):
     BUTTON.append(buttons(SETTINGS["text"]["button"]["default"], (WIDTH - 50, 10), (40, 40), make.new_field, "default"))
     BUTTON.append(buttons(SETTINGS["text"]["button"]["if"], (WIDTH - 50, 60), (40, 40), make.new_field, "if"))
     BUTTON.append(buttons(SETTINGS["text"]["button"]["while"], (WIDTH - 50, 110), (40, 40), make.new_field, "while"))
-    BUTTON.append(buttons(SETTINGS["text"]["button"]["shift"], (WIDTH - 50, 160), (40, 40), other.shift, None))
+    BUTTON.append(buttons(SETTINGS["text"]["button"]["shift"], (210, HEIGHT - 50), (40, 40), other.shift, None, image=SETTINGS["image"]["shift"], type="button_shift"))
     BUTTON.append(buttons(SETTINGS["text"]["button"]["save_json"], (WIDTH - 50, HEIGHT - 50), (40, 40), saveload.save_json, None, image=SETTINGS["image"]["save_json"]))
     BUTTON.append(buttons(SETTINGS["text"]["button"]["save_image"], (WIDTH - 50, HEIGHT - 100), (40, 40), saveload.save_image, None, image=SETTINGS["image"]["save_image"]))
     BUTTON.append(buttons(SETTINGS["text"]["button"]["load_json"], (WIDTH - 50, HEIGHT - 150), (40, 40), saveload.load_json, None, image=SETTINGS["image"]["load_json"]))

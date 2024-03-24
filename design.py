@@ -57,7 +57,7 @@ class buttons:
         elif self == selected_field:
             color = SETTINGS["color"]["selected"]
 
-        elif self.name == SETTINGS["text"]["button"]["shift"] and SHIFT:
+        elif self.type == "button_shift" and SHIFT:
             color = SETTINGS["color"]["shift_selected"]
 
         #based on type
